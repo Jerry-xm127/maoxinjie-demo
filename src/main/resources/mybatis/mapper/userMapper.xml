@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.primeton.maoxinjie.demo.dao.IUserDao">
+	<resultMap type="UserModel" id="baseResultUser">
+		<id column="ID" property="id" />
+		<result column="USER_NAME" property="uName" javaType="java.lang.String" jdbcType="VARCHAR"/>
+		<result column="USER_ACCOUNT" property="uAccount" javaType="java.lang.String" jdbcType="VARCHAR" />
+		<result column="USER_PWD" property="uPwd" javaType="java.lang.String" jdbcType="VARCHAR" />
+		<result column="USER_AGE" property="uAge" javaType="int" jdbcType="INTEGER" />
+		<result column="USER_SEX" property="uSex" javaType="java.lang.String" jdbcType="VARCHAR" />
+		<result column="USER_PHONE" property="uPhone" javaType="java.lang.String" jdbcType="VARCHAR" />
+		<result column="USER_STATUS" property="uStatus" javaType="java.lang.String" jdbcType="VARCHAR" />
+		<result column="USER_REMARK" property="uRemark" javaType="java.lang.String" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<resultMap type="UserModel" id="resultUserList" extends="baseResultUser">
+        <association property="org" javaType="OrganizationModel" columnPrefix="r_">
+        	<id column="ID" property="id" />
+        	<result column="ORG_NAME" property="oName" />
+			<result column="ORG_ADDRESS" property="oAddress" />
+        </association>
+	</resultMap>
+	<sql id= "baseParams"> 
+		ID,USER_NAME,USER_ACCOUNT,USER_PWD,USER_AGE,USER_SEX,USER_PHONE,USER_STATUS,USER_REMARK
+	</sql>
+	<sql id="userOrgParams">
+		u.ID,u.USER_NAME,u.USER_ACCOUNT,u.USER_PWD,u.USER_AGE,u.USER_SEX,u.USER_PHONE,u.USER_STATUS,u.USER_REMARK,
+		r.ID r_ID,r.ORG_NAME r_ORG_NAME,r.ORG_ADDRESS r_ORG_ADDRESS
+	</sql>
+	<!-- 添加用户 -->
+	<insert id="insertUser" parameterType="UserModel" useGeneratedKeys="true"
+		keyProperty="uID">
+		INSERT INTO demo_user (
+			USER_NAME,
+			USER_ACCOUNT,
+			USER_PWD,
+			USER_AGE,
+			USER_SEX,
+			USER_PHONE,
+			ORG_ID,
+			USER_STATUS,
+			USER_REMARK
+		)
+		VALUES
+		(#{uName},#{uAccount},#{uPwd},#{uAge},#{uSex},#{uPhone},#{org.oID},#{uStatus},#{uRemark})
+	</insert>
+	<!-- 带批量删除用户 -->
+	<delete id="deleteUser">
+		DELETE
+		FROM
+			demo_user
+		WHERE
+			ID IN 
+			<foreach collection="array" item = "eachId" open="(" close=")" separator=",">
+        		#{eachId}       		
+        	</foreach>
+	</delete>
+	<!-- 通过id删除用户 -->
+	<delete id="deleteUserById" parameterType="int">
+		DELETE
+		FROM
+			demo_user
+		WHERE
+			ID=#{id}
+	</delete>
+    <!-- 修改用户信息 -->
+    <update id="updateUser" parameterType="UserModel">
+        UPDATE demo_user
+        <set>
+	        <if test="uName != null">
+	        	USER_NAME=#{uName}
+	        </if>
+	        <if test="uPwd != null">
+	        	USER_PWD=#{uPwd}
+	        </if>
+	        <if test="uAge != null">
+	        	USER_AGE=#{uAge}
+	        </if>
+	        <if test="uSex != null">
+	        	USER_SEX=#{uSex}
+	        </if>
+	        <if test="uPhone != null">
+	        	USER_PHONE=#{uPhone}
+	        </if>
+	        <if test="org.ID != null">
+	        	ORG_ID=#{org.ID}
+	        </if>
+	        <if test="uStatus != null">
+	        	USER_STATUS=#{uStatus}
+	        </if>
+        </set>
+        <where>
+        	ID=#{uID}
+        </where>
+    </update>
+	<!-- 通过用户名密码查询  -->
+	<select id="getUserByAccountAndPwd" parameterType="UserModel" resultMap="resultUserList">
+		SELECT
+			<include refid="userOrgParams"/>
+		FROM
+			demo_user u 
+		LEFT JOIN demo_organization r
+		ON 
+			u.ORG_ID=r.ID
+		WHERE
+			u.USER_ACCOUNT = #{uAccount}	AND	u.USER_PWD = #{uPwd}
+	</select>
+    <!-- 通过id获取用户信息 -->
+	<select id="getUserByID" parameterType="UserModel" resultMap="resultUserList">
+		SELECT
+			<include refid="userOrgParams"/>
+		FROM
+			demo_user u 
+		LEFT JOIN demo_organization r
+		ON 
+			u.ORG_ID=r.ID
+		WHERE 
+			u.ID = #{id}
+	</select>
+    <!-- 通过oid获取用户信息 -->
+	<select id="getUserByOID" parameterType="UserModel" resultMap="resultUserList">
+		SELECT 
+			<include refid="baseParams" /> 
+		FROM
+			demo_user 
+		WHERE 
+			ORG_ID = #{id}
+	</select>
+	<!-- 用户的分页搜索查询 -->
+	<select id ="queryUserByPage" resultMap="resultUserList" parameterType="com.primeton.maoxinjie.demo.util.PageModel">
+		SELECT
+			<include refid="baseParams"/>
+		FROM
+			demo_user
+		<where>
+			<if test="searchObj != null">
+				<if test="searchObj.uName != null">
+					AND USER_NAME like CONCAT('%',#{searchObj.uName},'%')
+				</if>
+				<if test="searchObj.uSex != null">
+					AND USER_SEX = #{searchObj.uSex}
+				</if>
+			</if>
+		</where>
+		ORDER BY ${order}
+		<if test="pageNo != null">	
+			LIMIT #{startNo},#{pageSize}
+		</if>
+	</select>
+	<!-- 搜索查询用户的数量 -->
+	<select id="queryUserCount" resultType="int" parameterType="UserModel">
+		SELECT
+			COUNT(*)
+		FROM
+			demo_user
+		<where>
+				<if test="uName != null">
+					AND USER_NAME like CONCAT('%',#{uName},'%')
+				</if>
+				<if test="uSex != null">
+					AND USER_SEX = #{uSex}
+				</if>
+		</where>
+	</select>
+	
+</mapper>

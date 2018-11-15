@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.primeton.maoxinjie.demo.dao.IOrganizationDao">
+	<resultMap type="OrganizationModel" id="resultListOrganization">
+		<id column="ID" property="id" />
+		<result column="ORG_NAME" property="oName" />
+		<result column="ORG_ADDRESS" property="oAddress" />
+		<result column="ORG_STATUS" property="oStatus" />
+		<result column="ORG_REMARK" property="oRemark" />
+		<collection property="users" ofType="UserModel" columnPrefix="u_">
+			<id property="id" column="ID" />
+			<result column="USER_NAME" property="uName" javaType="java.lang.String" jdbcType="VARCHAR"/>
+			<result column="USER_ACCOUNT" property="uAccount" javaType="java.lang.String" jdbcType="VARCHAR" />
+			<result column="USER_SEX" property="uSex" javaType="java.lang.String" jdbcType="VARCHAR" />
+			<result column="USER_PHONE" property="uPhone" javaType="java.lang.String" jdbcType="VARCHAR" />
+		</collection>
+	</resultMap>
+	<sql id = "params"> 
+		ID,ORG_NAME,ORG_ADDRESS,ORG_STATUS,ORG_REMARK
+	</sql>
+
+	<!-- 添加组织机构 -->
+	<insert id="insertOrganization" parameterType="OrganizationModel" useGeneratedKeys="true"
+		keyProperty="oID">
+		INSERT INTO demo_organization (
+			ORG_NAME,
+			ORG_ADDRESS,
+			ORG_STATUS,
+			ORG_PID,
+			ORG_REMARK
+		)
+		VALUES
+		(#{oName},#{oAddress},#{oStatus},#{oPID},#{oRemark})
+	</insert>
+	<!-- 带批量删除组织机构信息 -->
+	<delete id="deleteOrganization">
+		DELETE
+		FROM
+			demo_organization
+		WHERE
+			ID IN 
+			<foreach collection="array" item = "eachId" open="(" close=")" separator=",">
+        		#{eachId}       		
+        	</foreach>
+	</delete>
+	<!-- 通过id组织机构 -->
+	<delete id="deleteOrganizationById" parameterType="OrganizationModel">
+		DELETE
+		FROM
+			demo_organization
+		WHERE
+			ID=#{oID}
+	</delete>
+    <!-- 修改用户信息 -->
+    <update id="updateOrganization" parameterType="OrganizationModel">
+        UPDATE demo_organization
+        <set>
+	        <if test="oName != null">
+	        	ORG_NAME=#{oName},
+	        </if>
+	        <if test="oAddress != null">
+	        	ORG_ADDRESS=#{oAddress},
+	        </if>
+	        <if test="oStatus != null">
+	        	ORG_STATUS=#{oStatus},
+	        </if>
+	        <if test="oPID != null">
+	        	ORG_PID=#{oPID},
+	        </if>
+	        <if test="oRemark != null">
+	        	ORG_REMARK=#{oRemark}
+	        </if>
+        </set>
+        <where>
+        	ID=#{oID}
+        </where>
+    </update>
+	<!-- 通过id获取组织机构信息 -->
+	<select id="getOrganizationByID" parameterType="int" resultMap="resultListOrganization">
+		SELECT 
+			<include refid="params" /> 
+		FROM
+			demo_organization 
+		WHERE 
+			ID = #{oID}
+	</select>
+	<!-- 组织机构的分页搜索查询 -->
+	<select id ="queryOrganizationByPage" resultMap="resultListOrganization" parameterType="com.primeton.maoxinjie.demo.util.PageModel">
+		SELECT
+			<include refid="params"/>
+		FROM
+			demo_organization
+		<where>
+			<if test="searchObj != null">
+				<if test="searchObj.oName != null">
+					AND ORG_NAME like CONCAT('%',#{searchObj.oName},'%')
+				</if>
+			</if>
+		</where>
+		ORDER BY ${order}
+		<if test="pageNo != null">	
+			LIMIT #{startNo},#{pageSize}
+		</if>
+	</select>
+</mapper>
