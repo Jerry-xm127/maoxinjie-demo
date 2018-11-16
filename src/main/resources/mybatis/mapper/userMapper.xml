@@ -32,7 +32,7 @@
 	<!-- 添加用户 -->
 	<insert id="insertUser" parameterType="UserModel" useGeneratedKeys="true"
 		keyProperty="uID">
-		INSERT INTO demo_user (
+		INSERT INTO mxj_demo_user (
 			USER_NAME,
 			USER_ACCOUNT,
 			USER_PWD,
@@ -50,7 +50,7 @@
 	<delete id="deleteUser">
 		DELETE
 		FROM
-			demo_user
+			mxj_demo_user
 		WHERE
 			ID IN 
 			<foreach collection="array" item = "eachId" open="(" close=")" separator=",">
@@ -61,13 +61,13 @@
 	<delete id="deleteUserById" parameterType="int">
 		DELETE
 		FROM
-			demo_user
+			mxj_demo_user
 		WHERE
 			ID=#{id}
 	</delete>
     <!-- 修改用户信息 -->
     <update id="updateUser" parameterType="UserModel">
-        UPDATE demo_user
+        UPDATE mxj_demo_user
         <set>
 	        <if test="uName != null">
 	        	USER_NAME=#{uName}
@@ -100,8 +100,8 @@
 		SELECT
 			<include refid="userOrgParams"/>
 		FROM
-			demo_user u 
-		LEFT JOIN demo_organization r
+			mxj_demo_user u 
+		LEFT JOIN mxj_demo_organization r
 		ON 
 			u.ORG_ID=r.ID
 		WHERE
@@ -112,8 +112,8 @@
 		SELECT
 			<include refid="userOrgParams"/>
 		FROM
-			demo_user u 
-		LEFT JOIN demo_organization r
+			mxj_demo_user u 
+		LEFT JOIN mxj_demo_organization r
 		ON 
 			u.ORG_ID=r.ID
 		WHERE 
@@ -124,16 +124,25 @@
 		SELECT 
 			<include refid="baseParams" /> 
 		FROM
-			demo_user 
+			mxj_demo_user 
 		WHERE 
 			ORG_ID = #{id}
+	</select>
+    <!-- 通过用户名称查询用户 -->
+	<select id="getUserByName" parameterType="UserModel" resultMap="resultUserList">
+		SELECT 
+			<include refid="baseParams" /> 
+		FROM
+			mxj_demo_user 
+		WHERE 
+			USER_NAME = #{uName}
 	</select>
 	<!-- 用户的分页搜索查询 -->
 	<select id ="queryUserByPage" resultMap="resultUserList" parameterType="com.primeton.maoxinjie.demo.util.PageModel">
 		SELECT
 			<include refid="baseParams"/>
 		FROM
-			demo_user
+			mxj_demo_user
 		<where>
 			<if test="searchObj != null">
 				<if test="searchObj.uName != null">
@@ -154,7 +163,7 @@
 		SELECT
 			COUNT(*)
 		FROM
-			demo_user
+			mxj_demo_user
 		<where>
 				<if test="uName != null">
 					AND USER_NAME like CONCAT('%',#{uName},'%')

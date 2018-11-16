@@ -24,7 +24,7 @@
 	<!-- 添加组织机构 -->
 	<insert id="insertOrganization" parameterType="OrganizationModel" useGeneratedKeys="true"
 		keyProperty="oID">
-		INSERT INTO demo_organization (
+		INSERT INTO mxj_demo_organization (
 			ORG_NAME,
 			ORG_ADDRESS,
 			ORG_STATUS,
@@ -38,7 +38,7 @@
 	<delete id="deleteOrganization">
 		DELETE
 		FROM
-			demo_organization
+			mxj_demo_organization
 		WHERE
 			ID IN 
 			<foreach collection="array" item = "eachId" open="(" close=")" separator=",">
@@ -49,13 +49,13 @@
 	<delete id="deleteOrganizationById" parameterType="OrganizationModel">
 		DELETE
 		FROM
-			demo_organization
+			mxj_demo_organization
 		WHERE
 			ID=#{oID}
 	</delete>
     <!-- 修改用户信息 -->
     <update id="updateOrganization" parameterType="OrganizationModel">
-        UPDATE demo_organization
+        UPDATE mxj_demo_organization
         <set>
 	        <if test="oName != null">
 	        	ORG_NAME=#{oName},
@@ -82,7 +82,7 @@
 		SELECT 
 			<include refid="params" /> 
 		FROM
-			demo_organization 
+			mxj_demo_organization 
 		WHERE 
 			ID = #{oID}
 	</select>
@@ -91,7 +91,7 @@
 		SELECT
 			<include refid="params"/>
 		FROM
-			demo_organization
+			mxj_demo_organization
 		<where>
 			<if test="searchObj != null">
 				<if test="searchObj.oName != null">

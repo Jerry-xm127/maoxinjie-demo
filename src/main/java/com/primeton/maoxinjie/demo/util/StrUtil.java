@@ -18,8 +18,8 @@ import org.slf4j.LoggerFactory;
 /**
  * 字符串工具类
  */
-public abstract class UtilStr {
-    private static Logger logger = LoggerFactory.getLogger(UtilStr.class);
+public abstract class StrUtil {
+    private static Logger logger = LoggerFactory.getLogger(StrUtil.class);
 
     /**
      * 判断是否为空

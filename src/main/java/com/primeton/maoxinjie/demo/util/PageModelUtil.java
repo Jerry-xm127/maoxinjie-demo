@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * 封装分页信息
  */
-public class PageModel<E> {
+public class PageModelUtil<E> {
 	
 	private E searchObj;
 

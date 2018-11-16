@@ -3,7 +3,7 @@ package com.primeton.maoxinjie.demo.dao;
 import java.util.List;
 
 import com.primeton.maoxinjie.demo.model.OrganizationModel;
-import com.primeton.maoxinjie.demo.util.PageModel;
+import com.primeton.maoxinjie.demo.util.PageModelUtil;
 
 
 /**
@@ -23,8 +23,10 @@ public interface IOrganizationDao {
 	int updateOrganization(OrganizationModel organizationModel) throws Exception;
 	//通过id获取组织机构详情
 	OrganizationModel getOrganizationByID(int id) throws Exception;
+	//通过名称查询组织机构
+	OrganizationModel getOrganizationByOrgName(String orgName) throws Exception;
 	//分页+搜索查询
-	List<OrganizationModel> queryOrganizationByPage(PageModel<OrganizationModel> page) throws Exception;
+	List<OrganizationModel> queryOrganizationByPage(PageModelUtil<OrganizationModel> page) throws Exception;
 	//搜索查询用户的数量
 	int getPersonCount(OrganizationModel organizationModel) throws Exception;
 }
