@@ -47,9 +47,9 @@
 
     <loggers>
         <!--过滤掉spring和mybatis的一些无用的debug信息 -->
-        <logger name="org.springframework" level="DEBUG">
+        <logger name="org.springframework" level="INFO">
         </logger>
-        <logger name="org.mybatis" level="DEBUG">
+        <logger name="org.mybatis" level="INFO">
         </logger>
 
         <root level="info">

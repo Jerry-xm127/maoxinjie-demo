@@ -4,7 +4,6 @@ package com.primeton.maoxinjie.demo.dao;
 import java.util.List;
 
 import com.primeton.maoxinjie.demo.model.UserModel;
-import com.primeton.maoxinjie.demo.util.PageModelUtil;
 
 
 
@@ -32,7 +31,7 @@ public interface IUserDao {
 	//通过orgId获取用户信息
 	List<UserModel> queryUserByOID(int orgId) throws Exception;
 	//分页+搜索查询
-	List<UserModel> queryUserByPage(PageModelUtil<UserModel> page) throws Exception;
+	List<UserModel> queryUserByPage(UserModel userModel) throws Exception;
 	//搜索查询用户的数量
 	int queryPersonCount(UserModel userModel) throws Exception;
 	

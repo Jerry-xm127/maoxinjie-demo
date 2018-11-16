@@ -87,7 +87,7 @@
 			ID = #{oID}
 	</select>
 	<!-- 组织机构的分页搜索查询 -->
-	<select id ="queryOrganizationByPage" resultMap="resultListOrganization" parameterType="com.primeton.maoxinjie.demo.util.PageModel">
+	<select id ="queryOrganizationByPage" resultMap="resultListOrganization" parameterType="com.primeton.maoxinjie.demo.util.PageModelUtil">
 		SELECT
 			<include refid="params"/>
 		FROM

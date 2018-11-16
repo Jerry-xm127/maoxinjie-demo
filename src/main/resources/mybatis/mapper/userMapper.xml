@@ -138,25 +138,20 @@
 			USER_NAME = #{uName}
 	</select>
 	<!-- 用户的分页搜索查询 -->
-	<select id ="queryUserByPage" resultMap="resultUserList" parameterType="com.primeton.maoxinjie.demo.util.PageModel">
+	<select id ="queryUserByPage" resultMap="resultUserList" parameterType="UserModel">
 		SELECT
 			<include refid="baseParams"/>
 		FROM
 			mxj_demo_user
 		<where>
-			<if test="searchObj != null">
-				<if test="searchObj.uName != null">
-					AND USER_NAME like CONCAT('%',#{searchObj.uName},'%')
-				</if>
-				<if test="searchObj.uSex != null">
-					AND USER_SEX = #{searchObj.uSex}
-				</if>
+			<if test="uName != null">
+				AND USER_NAME like CONCAT('%',#{uName},'%')
+			</if>
+			<if test="uSex != null">
+				AND USER_SEX = #{uSex}
 			</if>
 		</where>
-		ORDER BY ${order}
-		<if test="pageNo != null">	
-			LIMIT #{startNo},#{pageSize}
-		</if>
+		ORDER BY ID
 	</select>
 	<!-- 搜索查询用户的数量 -->
 	<select id="queryUserCount" resultType="int" parameterType="UserModel">

@@ -1,11 +1,14 @@
 package com.primeton.maoxinjie.demo.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.primeton.maoxinjie.demo.dao.IUserDao;
 import com.primeton.maoxinjie.demo.exception.BusiException;
 import com.primeton.maoxinjie.demo.model.UserModel;
@@ -117,17 +120,34 @@ public class UserServiceImpl implements IUserService {
 	 */
 	@Override
 	public int removeUserById(int id) throws Exception {
+		UserModel record = userDao.getUserByID(id);
+		if(record == null) {
+			throw new BusiException("id对应的用户不存在");
+		}
 		return userDao.deleteUserById(id);
 	}
 
-	@Override
-	public List<UserModel> queryUserByPage(PageModelUtil<UserModel> page) throws Exception {
-		return userDao.queryUserByPage(page);
-	}
 
 	@Override
 	public int getPersonCount(UserModel userModel) throws Exception {
 		return userDao.queryPersonCount(userModel);
+	}
+
+	/**
+	 * 
+	 * <p>Description: 分页+搜索查询用户信息</p> 
+	 * @param pageNo
+	 * @param pageSize
+	 * @param userModel
+	 * @return
+	 * @throws Exception
+	 */
+	@Override
+	public PageInfo<UserModel> queryUserByPage(int pageNo, int pageSize, UserModel userModel) throws Exception {
+		//对于官方文档所说PageHelper方法调用后紧跟 MyBatis 查询方法，这就是安全的
+			PageHelper.startPage(pageNo, pageSize);
+			List<UserModel> userList = userDao.queryUserByPage(userModel);
+		return new PageInfo<>(userList);
 	}
 
 

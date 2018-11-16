@@ -1,9 +1,7 @@
 package com.primeton.maoxinjie.demo.service;
 
-import java.util.List;
-
+import com.github.pagehelper.PageInfo;
 import com.primeton.maoxinjie.demo.model.UserModel;
-import com.primeton.maoxinjie.demo.util.PageModelUtil;
 
 public interface IUserService {
 	
@@ -20,7 +18,7 @@ public interface IUserService {
 	//通过id获取用户信息
 	UserModel getUserByID(int id) throws Exception;
 	//分页+搜索查询
-	List<UserModel> queryUserByPage(PageModelUtil<UserModel> page) throws Exception;
+	PageInfo<UserModel> queryUserByPage(int pageNo, int pageSize, UserModel userModel) throws Exception;
 	//搜索查询用户的数量
 	int getPersonCount(UserModel userModel) throws Exception;
 }
