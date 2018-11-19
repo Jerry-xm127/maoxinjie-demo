@@ -1,7 +1,8 @@
 package com.primeton.maoxinjie.demo.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +14,7 @@ import com.github.pagehelper.PageInfo;
 import com.primeton.maoxinjie.demo.constant.ResultCodeEnum;
 import com.primeton.maoxinjie.demo.model.UserModel;
 import com.primeton.maoxinjie.demo.service.IUserService;
-import com.primeton.maoxinjie.demo.util.ResponseResult;
+import com.primeton.maoxinjie.demo.util.ResponseResultUtil;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -29,6 +30,8 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
+	
+	private Logger log = LoggerFactory.getLogger(UserController.class);
 
 	@Autowired
 	public IUserService UserService;
@@ -39,104 +42,105 @@ public class UserController {
 		@ApiImplicitParam(name="userModel",value="用户账号",required=true,paramType="form",dataTypeClass=UserModel.class),
 	})
 	@RequestMapping(value="/",method=RequestMethod.POST)
-	public ResponseResult createUser(@RequestBody UserModel userModel) {
+	public ResponseResultUtil createUser(@RequestBody UserModel userModel) {
 		
 		//存放返回前台信息
-		ResponseResult responseResult = new ResponseResult();
+		ResponseResultUtil responseResult = new ResponseResultUtil();
 		try {
 			int num = UserService.createUser(userModel);
 			if (num > 0) {
-				responseResult = ResponseResult.success();
+				responseResult = ResponseResultUtil.success();
 			}else {
-				responseResult = ResponseResult.error();
+				responseResult = ResponseResultUtil.error();
 			}
 		} catch (Exception e) {
-			responseResult = ResponseResult.sysError();
-			e.printStackTrace();
+			responseResult = ResponseResultUtil.sysError();
+			log.error("数据库操作失败", e);
 		}
 		return responseResult;
 	}
 	
 	@ApiOperation(value="根据id删除用户信息",notes="删除用户信息")
 	@RequestMapping(value="/{id}",method=RequestMethod.DELETE)
-	public ResponseResult removeUser(@PathVariable("id") int id) {
+	public ResponseResultUtil removeUser(@PathVariable("id") int id) {
 		//存放返回前台信息
-		ResponseResult responseResult = new ResponseResult();
+		ResponseResultUtil responseResult = new ResponseResultUtil();
 		try {
 			int num = UserService.removeUserById(id);
 			if (num > 0) {
-				responseResult = ResponseResult.success();
+				responseResult = ResponseResultUtil.success();
 			}else {
-				responseResult = ResponseResult.error();
+				responseResult = ResponseResultUtil.error();
 			}
 		} catch (Exception e) {
-			responseResult = ResponseResult.sysError();
-			e.printStackTrace();
+			responseResult = ResponseResultUtil.sysError();
+			log.error("数据库操作失败", e);
 		}
 		return responseResult;
 	}
 	
 	@ApiOperation(value="通过id获取",notes="通过id获取")
 	@RequestMapping(value="/{id}",method=RequestMethod.GET)
-	public ResponseResult getUser(@PathVariable("id") int id) {
+	public ResponseResultUtil getUser(@PathVariable("id") int id) {
 		//存放返回前台信息
-		ResponseResult responseResult = new ResponseResult();
+		ResponseResultUtil responseResult = new ResponseResultUtil();
 		try {
 			UserModel user = UserService.getUserByID(id);
 			if (null != user) {
-				responseResult = ResponseResult.success();
+				responseResult = ResponseResultUtil.success();
 				responseResult.put("data", user);
 			}else {
-				responseResult = ResponseResult.error(ResultCodeEnum.NO_FIND_DATA.getCode(), ResultCodeEnum.NO_FIND_DATA.getMessage());
+				responseResult = ResponseResultUtil.error(ResultCodeEnum.NO_FIND_DATA.getCode(), ResultCodeEnum.NO_FIND_DATA.getMessage());
 			}
 		} catch (Exception e) {
-			responseResult = ResponseResult.sysError();
-			e.printStackTrace();
+			responseResult = ResponseResultUtil.sysError();
+			log.error("数据库操作失败", e);
 		}
 		return responseResult;
 	}
 	
 	@ApiOperation(value="通过id获取",notes="通过id获取")
 	@RequestMapping(value="/{id}",method=RequestMethod.PUT)
-	public ResponseResult modifyUser(@RequestBody UserModel userModel) {
+	public ResponseResultUtil modifyUser(@PathVariable("id") int id, @RequestBody UserModel userModel) {
 		//存放返回前台信息
-		ResponseResult responseResult = new ResponseResult();
+		ResponseResultUtil responseResult = new ResponseResultUtil();
+		userModel.setId(id);
 		try {
 			int num = UserService.modifyUser(userModel);
 			if (num > 0) {
-				responseResult = ResponseResult.success();
+				responseResult = ResponseResultUtil.success();
 			}else {
-				responseResult = ResponseResult.error();
+				responseResult = ResponseResultUtil.error();
 			}
 		} catch (Exception e) {
-			responseResult = ResponseResult.sysError();
-			e.printStackTrace();
+			responseResult = ResponseResultUtil.sysError();
+			log.error("数据库操作失败", e);
 		}
 		return responseResult;
 	}
 	
 	@ApiOperation(value = "分页+搜索获取用户信息", notes="模糊查询及分页显示")
 	@RequestMapping(value="/",method=RequestMethod.GET)
-	public ResponseResult queryUsers(@RequestParam(value="pageNo",defaultValue="1") int pageNo, 
+	public ResponseResultUtil queryUsers(@RequestParam(value="pageNo",defaultValue="1") int pageNo, 
 									@RequestParam(value="pageSize",defaultValue="5") int pageSize,
 									@RequestParam("userName") String userName,
 									@RequestParam("sex") String sex) {
 		//存放返回前台信息
-		ResponseResult responseResult = new ResponseResult();
+		ResponseResultUtil responseResult = new ResponseResultUtil();
 		UserModel serachUser = new UserModel();
 		serachUser.setuName(userName);
 		serachUser.setuSex(sex);
 		try {
 			PageInfo<UserModel> userList = UserService.queryUserByPage(pageNo, pageSize, serachUser);
 			if (userList.getList().size() > 0) {
-				responseResult = ResponseResult.success();
+				responseResult = ResponseResultUtil.success();
 				responseResult.put("data", userList);
 			}else {
-				responseResult = ResponseResult.error(ResultCodeEnum.NO_FIND_DATA.getCode(), ResultCodeEnum.NO_FIND_DATA.getMessage());
+				responseResult = ResponseResultUtil.error(ResultCodeEnum.NO_FIND_DATA.getCode(), ResultCodeEnum.NO_FIND_DATA.getMessage());
 			}
 		} catch (Exception e) {
-			responseResult = ResponseResult.sysError();
-			e.printStackTrace();
+			responseResult = ResponseResultUtil.sysError();
+			log.error("数据库操作失败", e);
 		}
 		return responseResult;
 	}

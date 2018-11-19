@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.primeton.maoxinjie.demo.util.ResponseResult;
+import com.primeton.maoxinjie.demo.util.ResponseResultUtil;
 
 /**
  * 统一异常处理类
@@ -24,26 +24,26 @@ public class GlobalDefaultExceptionHandler {
      * 处理的异常类型
      */
     @ExceptionHandler(value = BusiException.class)
-    public ResponseResult defaultErrorHandler(HttpServletRequest req, Exception e) {
+    public ResponseResultUtil defaultErrorHandler(HttpServletRequest req, Exception e) {
     	 log.error("业务异常:", e);
-         return ResponseResult.error("业务异常:" + e.getMessage());
+         return ResponseResultUtil.error("业务异常:" + e.getMessage());
     }
     
     /**
      * 拦截未知的运行时异常
      */
     @ExceptionHandler(RuntimeException.class)
-    public ResponseResult notFount(RuntimeException e) {
+    public ResponseResultUtil notFount(RuntimeException e) {
         log.error("运行时异常:", e);
-        return ResponseResult.error("运行时异常:" + e.getMessage());
+        return ResponseResultUtil.error("运行时异常:" + e.getMessage());
     }
 
     /**
      * 系统异常
      */
     @ExceptionHandler(Exception.class)
-    public ResponseResult handleException(Exception e) {
+    public ResponseResultUtil handleException(Exception e) {
         log.error(e.getMessage(), e);
-        return ResponseResult.error("服务器错误，请联系管理员");
+        return ResponseResultUtil.error("服务器错误，请联系管理员");
     }
 } 

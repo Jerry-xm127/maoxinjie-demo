@@ -1,5 +1,6 @@
 package com.primeton.maoxinjie.demo.service;
 
+import com.github.pagehelper.PageInfo;
 import com.primeton.maoxinjie.demo.model.OrganizationModel;
 
 public interface IOrganizationService {
@@ -14,4 +15,6 @@ public interface IOrganizationService {
 	int modifyOrganization(OrganizationModel organizationModel) throws Exception;
 	//通过id获取组织机构详情
 	OrganizationModel getOrganizationByID(int id) throws Exception;
+	//分页+搜索查询
+	PageInfo<OrganizationModel> queryOrgByPage(int pageNo, int pageSize, OrganizationModel organizationModel) throws Exception;
 }

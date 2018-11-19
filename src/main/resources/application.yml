@@ -50,3 +50,4 @@ pagehelper:
 #log4j2记录日志   
 logging:
   config: classpath:log4j2.xml
+    

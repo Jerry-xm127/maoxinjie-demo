@@ -70,29 +70,29 @@
         UPDATE mxj_demo_user
         <set>
 	        <if test="uName != null">
-	        	USER_NAME=#{uName}
+	        	USER_NAME=#{uName},
 	        </if>
 	        <if test="uPwd != null">
-	        	USER_PWD=#{uPwd}
+	        	USER_PWD=#{uPwd},
 	        </if>
 	        <if test="uAge != null">
-	        	USER_AGE=#{uAge}
+	        	USER_AGE=#{uAge},
 	        </if>
 	        <if test="uSex != null">
-	        	USER_SEX=#{uSex}
+	        	USER_SEX=#{uSex},
 	        </if>
 	        <if test="uPhone != null">
-	        	USER_PHONE=#{uPhone}
+	        	USER_PHONE=#{uPhone},
 	        </if>
-	        <if test="org.ID != null">
-	        	ORG_ID=#{org.ID}
+	        <if test="org != null">
+	        	ORG_ID=#{org.id},
 	        </if>
 	        <if test="uStatus != null">
-	        	USER_STATUS=#{uStatus}
+	        	USER_STATUS=#{uStatus},
 	        </if>
         </set>
         <where>
-        	ID=#{uID}
+        	ID=#{id}
         </where>
     </update>
 	<!-- 通过用户名密码查询  -->
@@ -120,7 +120,7 @@
 			u.ID = #{id}
 	</select>
     <!-- 通过oid获取用户信息 -->
-	<select id="getUserByOID" parameterType="UserModel" resultMap="resultUserList">
+	<select id="queryUserByOID" parameterType="int" resultMap="resultUserList">
 		SELECT 
 			<include refid="baseParams" /> 
 		FROM
@@ -148,7 +148,7 @@
 				AND USER_NAME like CONCAT('%',#{uName},'%')
 			</if>
 			<if test="uSex != null">
-				AND USER_SEX = #{uSex}
+				AND USER_SEX=#{uSex}
 			</if>
 		</where>
 		ORDER BY ID

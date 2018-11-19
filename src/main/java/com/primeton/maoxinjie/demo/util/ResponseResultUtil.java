@@ -13,14 +13,14 @@ import com.primeton.maoxinjie.demo.constant.ResultCodeEnum;
  *
  */
 @JsonIgnoreProperties(ignoreUnknown=true)
-public class ResponseResult extends HashMap<String, Object>{
+public class ResponseResultUtil extends HashMap<String, Object>{
 
 	private static final long serialVersionUID = 1826731312620400974L;
 
 	/**
 	 * 初始化消息对象
 	 */
-    public ResponseResult(){
+    public ResponseResultUtil(){
     }
     
     /**
@@ -32,7 +32,7 @@ public class ResponseResult extends HashMap<String, Object>{
      */
     @Override
     @JsonIgnore
-    public ResponseResult put(String key, Object value) {
+    public ResponseResultUtil put(String key, Object value) {
         super.put(key, value);
         return this;
     }
@@ -42,7 +42,7 @@ public class ResponseResult extends HashMap<String, Object>{
      * 
      * @return 错误消息
      */
-    public static ResponseResult sysError() {
+    public static ResponseResultUtil sysError() {
         return error(ResultCodeEnum.SYSTEM_ERROR.getCode(),ResultCodeEnum.SYSTEM_ERROR.getMessage());
     }
     
@@ -50,7 +50,7 @@ public class ResponseResult extends HashMap<String, Object>{
      * 返回用户操作错误信息
      * @return 错误消息
      */
-    public static ResponseResult error() {
+    public static ResponseResultUtil error() {
         return error(ResultCodeEnum.ERROR.getCode(),ResultCodeEnum.ERROR.getMessage());
     }
     
@@ -60,7 +60,7 @@ public class ResponseResult extends HashMap<String, Object>{
      * @param msg 内容
      * @return 错误消息
      */
-    public static ResponseResult error(String msg) {
+    public static ResponseResultUtil error(String msg) {
         return error(500, msg);
     }
     
@@ -71,8 +71,8 @@ public class ResponseResult extends HashMap<String, Object>{
      * @param msg 内容
      * @return 错误消息
      */
-    public static ResponseResult error(int code, String msg) {
-        ResponseResult json = new ResponseResult();
+    public static ResponseResultUtil error(int code, String msg) {
+        ResponseResultUtil json = new ResponseResultUtil();
         json.put("code", code);
         json.put("msg", msg);
         return json;
@@ -83,8 +83,8 @@ public class ResponseResult extends HashMap<String, Object>{
      * 
      * @return 成功消息
      */
-    public static ResponseResult success() {
-        return ResponseResult.success(ResultCodeEnum.SUCCESS.getCode(),ResultCodeEnum.SUCCESS.getMessage());
+    public static ResponseResultUtil success() {
+        return ResponseResultUtil.success(ResultCodeEnum.SUCCESS.getCode(),ResultCodeEnum.SUCCESS.getMessage());
     }
 
     /**
@@ -93,8 +93,8 @@ public class ResponseResult extends HashMap<String, Object>{
      * @param msg 内容
      * @return 成功消息
      */
-    public static ResponseResult success(int code, String msg) {
-        ResponseResult json = new ResponseResult();
+    public static ResponseResultUtil success(int code, String msg) {
+        ResponseResultUtil json = new ResponseResultUtil();
         json.put("code", code);
         json.put("msg", msg);
         return json;

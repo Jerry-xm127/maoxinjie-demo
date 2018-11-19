@@ -45,7 +45,7 @@
         		#{eachId}       		
         	</foreach>
 	</delete>
-	<!-- 通过id组织机构 -->
+	<!-- 通过id删除组织机构 -->
 	<delete id="deleteOrganizationById" parameterType="OrganizationModel">
 		DELETE
 		FROM
@@ -53,7 +53,7 @@
 		WHERE
 			ID=#{oID}
 	</delete>
-    <!-- 修改用户信息 -->
+    <!-- 修改组织机构信息 -->
     <update id="updateOrganization" parameterType="OrganizationModel">
         UPDATE mxj_demo_organization
         <set>
@@ -74,7 +74,7 @@
 	        </if>
         </set>
         <where>
-        	ID=#{oID}
+        	ID=#{id}
         </where>
     </update>
 	<!-- 通过id获取组织机构信息 -->
@@ -84,24 +84,28 @@
 		FROM
 			mxj_demo_organization 
 		WHERE 
-			ID = #{oID}
+			ID = #{id}
+	</select>
+	<!-- 通过名称获取组织机构信息 -->
+	<select id="getOrganizationByOrgName" parameterType="String" resultMap="resultListOrganization">
+		SELECT 
+			<include refid="params" /> 
+		FROM
+			mxj_demo_organization 
+		WHERE 
+			ORG_NAME = #{orgName}
 	</select>
 	<!-- 组织机构的分页搜索查询 -->
-	<select id ="queryOrganizationByPage" resultMap="resultListOrganization" parameterType="com.primeton.maoxinjie.demo.util.PageModelUtil">
+	<select id ="queryOrganizationByPage" resultMap="resultListOrganization" parameterType="OrganizationModel">
 		SELECT
 			<include refid="params"/>
 		FROM
 			mxj_demo_organization
 		<where>
-			<if test="searchObj != null">
-				<if test="searchObj.oName != null">
-					AND ORG_NAME like CONCAT('%',#{searchObj.oName},'%')
-				</if>
+			<if test="oName != null">
+				AND ORG_NAME like CONCAT('%',#{oName},'%')
 			</if>
 		</where>
-		ORDER BY ${order}
-		<if test="pageNo != null">	
-			LIMIT #{startNo},#{pageSize}
-		</if>
+		ORDER BY ID
 	</select>
 </mapper>

@@ -1,6 +1,5 @@
 package com.primeton.maoxinjie.demo.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,11 +8,11 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.primeton.maoxinjie.demo.constant.ResultCodeEnum;
 import com.primeton.maoxinjie.demo.dao.IUserDao;
 import com.primeton.maoxinjie.demo.exception.BusiException;
 import com.primeton.maoxinjie.demo.model.UserModel;
 import com.primeton.maoxinjie.demo.service.IUserService;
-import com.primeton.maoxinjie.demo.util.PageModelUtil;
 import com.primeton.maoxinjie.demo.util.StrUtil;
 
 /**
@@ -40,11 +39,11 @@ public class UserServiceImpl implements IUserService {
 		int num = 0;
 		//判断必要的属性为空
 		if(StrUtil.isNull(userModel.getuAccount()) || StrUtil.isNull(userModel.getuPwd()) || StrUtil.isNull(userModel.getuName())) {
-			throw new BusiException("用户名或密码或姓名不能为空!");
+			throw new BusiException(ResultCodeEnum.ACCOUNT_PWD_USERNAME_ERROR.getCode(),ResultCodeEnum.ACCOUNT_PWD_USERNAME_ERROR.getMessage());
 		}
 		//对于创建用户来说先判断该用户是否已经存在
 		if(userDao.getUserByName(userModel.getuName()) != null) {
-			throw new BusiException("该用户已存在!");
+			throw new BusiException(ResultCodeEnum.USER_EXIST_ERROR.getCode(),ResultCodeEnum.USER_EXIST_ERROR.getMessage());
 		}
 		num = userDao.insertUser(userModel);
 		return num;
@@ -73,11 +72,11 @@ public class UserServiceImpl implements IUserService {
 	public int modifyUser(UserModel userModel) throws Exception {
 		int num = 0;
 		if( userModel == null) {
-			throw new BusiException("修改的用户信息为空!");
+			throw new BusiException(ResultCodeEnum.USER_NULL_ERROR.getCode(),ResultCodeEnum.USER_NULL_ERROR.getMessage());
 		}
 		UserModel record = userDao.getUserByID(userModel.getId());
 		if(record == null || record.getuName().equals(userModel.getuName())) {
-			throw new BusiException("用户名已存在不能进行修改");
+			throw new BusiException(ResultCodeEnum.USER_EXIST_ERROR.getCode(),ResultCodeEnum.USER_EXIST_ERROR.getMessage());
 		}
 			num = userDao.updateUser(userModel);
 		return num;
@@ -120,14 +119,22 @@ public class UserServiceImpl implements IUserService {
 	 */
 	@Override
 	public int removeUserById(int id) throws Exception {
+		int num = 0;
 		UserModel record = userDao.getUserByID(id);
 		if(record == null) {
-			throw new BusiException("id对应的用户不存在");
+			throw new BusiException(ResultCodeEnum.ID_USER_EXIST_ERROR.getCode(),ResultCodeEnum.ID_USER_EXIST_ERROR.getMessage());
 		}
-		return userDao.deleteUserById(id);
+			num = userDao.deleteUserById(id);
+		return num;
 	}
 
-
+	/**
+	 * 
+	 * <p>Description: 获取用户的数量</p> 
+	 * @param userModel
+	 * @return
+	 * @throws Exception
+	 */
 	@Override
 	public int getPersonCount(UserModel userModel) throws Exception {
 		return userDao.queryPersonCount(userModel);

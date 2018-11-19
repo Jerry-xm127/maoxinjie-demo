@@ -26,7 +26,7 @@ public interface IOrganizationDao {
 	//通过名称查询组织机构
 	OrganizationModel getOrganizationByOrgName(String orgName) throws Exception;
 	//分页+搜索查询
-	List<OrganizationModel> queryOrganizationByPage(PageModelUtil<OrganizationModel> page) throws Exception;
+	List<OrganizationModel> queryOrganizationByPage(OrganizationModel organizationModel) throws Exception;
 	//搜索查询用户的数量
 	int getPersonCount(OrganizationModel organizationModel) throws Exception;
 }
