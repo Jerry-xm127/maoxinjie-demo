@@ -43,6 +43,12 @@ public class OrgTestCase {
 		this.testQueryOrg();
 	}
 	
+	/**
+	 * 
+	 * <p>Description: 测试创建组织机构</p>
+	 * @parameter
+	 * @return
+	 */
 	public void testCreateOrg(){
 		int num = 0;
 		OrganizationModel organizationModel = new OrganizationModel();
@@ -57,6 +63,12 @@ public class OrgTestCase {
 		Assert.assertNotEquals(0, num);
 	}
 	
+	/**
+	 * 
+	 * <p>Description: 测试删除组织机构</p>
+	 * @parameter
+	 * @return
+	 */
 	public void testDeleteOrg() {
 		int id = 2;
 		int result = 0;
@@ -68,6 +80,12 @@ public class OrgTestCase {
 		Assert.assertNotEquals(0, result);
 	}
 	
+	/**
+	 * 
+	 * <p>Description: 测试修改组织机构</p>
+	 * @parameter
+	 * @return
+	 */
 	public void testUpdateOrg() {
 		OrganizationModel organizationModel = new OrganizationModel();
 		organizationModel.setoName("金融事业部");
@@ -83,6 +101,12 @@ public class OrgTestCase {
 		Assert.assertNotEquals(0, result);
 	}
 	
+	/**
+	 * 
+	 * <p>Description: 测试根据id查询信息</p>
+	 * @parameter
+	 * @return
+	 */
 	public void testGetOrgById() {
 		int id = 1;
 		OrganizationModel result = null;
@@ -94,6 +118,12 @@ public class OrgTestCase {
 		Assert.assertNotNull("通过id查询异常", result);;
 	}
 	
+	/**
+	 * 
+	 * <p>Description: 分页+搜索组织机构数据</p>
+	 * @parameter
+	 * @return
+	 */
 	public void testQueryOrg() {
 		int pageNo = 1;
 		int pageSize = 5;

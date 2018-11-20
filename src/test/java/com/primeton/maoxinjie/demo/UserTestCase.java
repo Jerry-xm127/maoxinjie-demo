@@ -52,6 +52,12 @@ public class UserTestCase {
 		
 	}
 
+	/**
+	 * 
+	 * <p>Description: 测试添加用户</p>
+	 * @parameter
+	 * @return
+	 */
 	public void testCreateUser(){
 		UserModel userModel = new UserModel();
 		userModel.setuAccount("ceshiten");
@@ -68,6 +74,12 @@ public class UserTestCase {
 		Assert.assertNotEquals(0, num);
 	}
 
+	/**
+	 * 
+	 * <p>Description: 测试删除用户</p>
+	 * @parameter
+	 * @return
+	 */
 	public void testDeleteUser() {
 		int id = 16;
 		int result = 0;
@@ -79,6 +91,12 @@ public class UserTestCase {
 		Assert.assertNotEquals(0, result);
 	}
 	
+	/**
+	 * 
+	 * <p>Description: 测试修改用户</p>
+	 * @parameter
+	 * @return
+	 */
 	public void testUpdateUser() {
 		UserModel userModel = new UserModel();
 		userModel.setId(20);
@@ -96,6 +114,12 @@ public class UserTestCase {
 		Assert.assertNotEquals(0, result);
 	}
 	
+	/**
+	 * 
+	 * <p>Description: 测试根据id查询用户</p>
+	 * @parameter
+	 * @return
+	 */
 	public void testGetUserById() {
 		int id = 223;
 		UserModel result = new UserModel();
@@ -107,6 +131,12 @@ public class UserTestCase {
 		Assert.assertNotNull("查询失败", result);;
 	}
 	
+	/**
+	 * 
+	 * <p>Description: 分页+搜索用户的测试</p>
+	 * @parameter
+	 * @return
+	 */
 	public void testQueryUser() {
 		int pageNo = 1;
 		int pageSize = 5;
