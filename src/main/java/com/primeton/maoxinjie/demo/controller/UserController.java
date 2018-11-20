@@ -39,7 +39,7 @@ public class UserController {
 	
 	@ApiOperation(value="添加用户信息",notes="添加用户信息")
 	@ApiImplicitParams({
-		@ApiImplicitParam(name="userModel",value="用户账号",required=true,paramType="form",dataTypeClass=UserModel.class),
+		@ApiImplicitParam(name="userModel",value="用户账号"),
 	})
 	@RequestMapping(value="/",method=RequestMethod.POST)
 	public ResponseResultUtil createUser(@RequestBody UserModel userModel) {
