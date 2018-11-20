@@ -93,7 +93,7 @@ public class OrganizationController {
 		return ResponseEntity.ok(responseResult);
 	}
 
-	@ApiOperation(value="通过id获取",notes="通过id获取")
+	@ApiOperation(value="通过id修改",notes="通过id修改组织机构")
 	@RequestMapping(value="/{id}",method=RequestMethod.PUT)
 	public ResponseResultUtil modifyOrganization(@PathVariable("id") int id, @RequestBody OrganizationModel organizationModel) {
 		//存放返回前台信息

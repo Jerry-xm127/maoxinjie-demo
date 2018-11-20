@@ -99,7 +99,7 @@ public class UserController {
 		return responseResult;
 	}
 	
-	@ApiOperation(value="通过id获取",notes="通过id获取")
+	@ApiOperation(value="通过id修改",notes="通过id修改用户信息")
 	@RequestMapping(value="/{id}",method=RequestMethod.PUT)
 	public ResponseResultUtil modifyUser(@PathVariable("id") int id, @RequestBody UserModel userModel) {
 		//存放返回前台信息
