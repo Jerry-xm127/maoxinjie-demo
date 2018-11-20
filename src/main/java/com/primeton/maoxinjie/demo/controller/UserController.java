@@ -37,7 +37,7 @@ public class UserController {
 	public IUserService UserService;
 	
 	
-	@ApiOperation(value="添加用户信息",notes="添加用户信息")
+	@ApiOperation(value="添加用户信息",notes="添加用户信息",response=ResponseResultUtil.class)
 	@ApiImplicitParams({
 		@ApiImplicitParam(name="userModel",value="用户账号"),
 	})
@@ -60,7 +60,7 @@ public class UserController {
 		return responseResult;
 	}
 	
-	@ApiOperation(value="根据id删除用户信息",notes="删除用户信息")
+	@ApiOperation(value="根据id删除用户信息",notes="删除用户信息",response=ResponseResultUtil.class)
 	@RequestMapping(value="/{id}",method=RequestMethod.DELETE)
 	public ResponseResultUtil removeUser(@PathVariable("id") int id) {
 		//存放返回前台信息
@@ -79,7 +79,7 @@ public class UserController {
 		return responseResult;
 	}
 	
-	@ApiOperation(value="通过id获取",notes="通过id获取")
+	@ApiOperation(value="通过id获取",notes="通过id获取",response=ResponseResultUtil.class)
 	@RequestMapping(value="/{id}",method=RequestMethod.GET)
 	public ResponseResultUtil getUser(@PathVariable("id") int id) {
 		//存放返回前台信息
@@ -99,7 +99,7 @@ public class UserController {
 		return responseResult;
 	}
 	
-	@ApiOperation(value="通过id修改",notes="通过id修改用户信息")
+	@ApiOperation(value="通过id修改",notes="通过id修改用户信息",response=ResponseResultUtil.class)
 	@RequestMapping(value="/{id}",method=RequestMethod.PUT)
 	public ResponseResultUtil modifyUser(@PathVariable("id") int id, @RequestBody UserModel userModel) {
 		//存放返回前台信息
@@ -119,7 +119,7 @@ public class UserController {
 		return responseResult;
 	}
 	
-	@ApiOperation(value = "分页+搜索获取用户信息", notes="模糊查询及分页显示")
+	@ApiOperation(value = "分页+搜索获取用户信息", notes="模糊查询及分页显示",response=ResponseResultUtil.class)
 	@RequestMapping(value="/",method=RequestMethod.GET)
 	public ResponseResultUtil queryUsers(@RequestParam(value="pageNo",defaultValue="1") int pageNo, 
 									@RequestParam(value="pageSize",defaultValue="5") int pageSize,

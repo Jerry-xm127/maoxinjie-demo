@@ -35,7 +35,7 @@ public class OrganizationController {
 	@Autowired
 	private IOrganizationService organizationService;
 	
-	@ApiOperation(value="添加组织机构",notes="添加组织机构信息")
+	@ApiOperation(value="添加组织机构",notes="添加组织机构信息",response=ResponseResultUtil.class)
 	@RequestMapping(value="/",method=RequestMethod.POST)
 	public ResponseResultUtil createOrganization(@RequestBody OrganizationModel organizationModel) {
 		//存放返回前台信息
@@ -54,7 +54,7 @@ public class OrganizationController {
 		return responseResult;
 	}
 	
-	@ApiOperation(value="通过id删除组织机构",notes="删除组织机构信息")
+	@ApiOperation(value="通过id删除组织机构",notes="删除组织机构信息",response=ResponseResultUtil.class)
 	@RequestMapping(value="/{id}",method=RequestMethod.DELETE)
 	public ResponseResultUtil removeOrganizationById(@PathVariable("id") int id) {
 		//存放返回前台信息
@@ -73,7 +73,7 @@ public class OrganizationController {
 		return responseResult;
 	}
 	
-	@ApiOperation(value="通过id获取组织机构详细信息",notes="通过id获取组织机构信息")
+	@ApiOperation(value="通过id获取组织机构详细信息",notes="通过id获取组织机构信息",response=ResponseEntity.class)
 	@RequestMapping(value="/{id}",method=RequestMethod.GET)
 	public ResponseEntity<ResponseResultUtil> getOrganizationById(@PathVariable("id") int id) {
 		//存放返回前台信息
@@ -93,7 +93,7 @@ public class OrganizationController {
 		return ResponseEntity.ok(responseResult);
 	}
 
-	@ApiOperation(value="通过id修改",notes="通过id修改组织机构")
+	@ApiOperation(value="通过id修改",notes="通过id修改组织机构",response=ResponseResultUtil.class)
 	@RequestMapping(value="/{id}",method=RequestMethod.PUT)
 	public ResponseResultUtil modifyOrganization(@PathVariable("id") int id, @RequestBody OrganizationModel organizationModel) {
 		//存放返回前台信息
@@ -113,7 +113,7 @@ public class OrganizationController {
 		return responseResult;
 	}
 	
-	@ApiOperation(value = "分页+搜索获取组织机构信息", notes="模糊查询及分页显示")
+	@ApiOperation(value = "分页+搜索获取组织机构信息", notes="模糊查询及分页显示",response=ResponseResultUtil.class)
 	@RequestMapping(value="/",method=RequestMethod.GET)
 	public ResponseResultUtil queryOrganization(@RequestParam(value="pageNo",defaultValue="1") int pageNo, 
 									@RequestParam(value="pageSize",defaultValue="5") int pageSize,

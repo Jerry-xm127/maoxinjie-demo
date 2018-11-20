@@ -31,7 +31,7 @@ public class LoginController {
 	@Autowired
 	private IUserService userService;
 	
-	@ApiOperation(value="根据账号密码登录",notes="验证登录是否正确")
+	@ApiOperation(value="根据账号密码登录",notes="验证登录是否正确",response=ResponseResultUtil.class)
 	@ApiImplicitParams({
 			@ApiImplicitParam(name="account",value="用户账号",required=true,paramType="query"),
 			@ApiImplicitParam(name="pwd",value="密码",required=true,paramType="query")})
