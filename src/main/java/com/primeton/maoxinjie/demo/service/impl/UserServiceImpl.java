@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.github.pagehelper.PageHelper;
@@ -22,6 +23,7 @@ import com.primeton.maoxinjie.demo.util.StrUtil;
  */
 @Service
 @JsonIgnoreProperties(ignoreUnknown=true)
+@Transactional
 public class UserServiceImpl implements IUserService {
 
 	@Autowired
