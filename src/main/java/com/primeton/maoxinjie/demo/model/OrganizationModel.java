@@ -18,12 +18,12 @@ public class OrganizationModel implements Serializable{
 
 	private static final long serialVersionUID = 8330685180188833372L;
 	
-	private Integer id;    			//主键
-	private String oName;			    //组织机构名称
-	private String oAddress;             //机构地址
-	private Integer oPID; 				//机构的父级ID
-	private String oStatus;            //可用状态          0：不可用    1可用
-	private String oRemark;				//备注
+	private Integer orgId;    			//主键
+	private String orgName;			    //组织机构名称
+	private String orgAddress;             //机构地址
+	private Integer orgPid; 				//机构的父级ID
+	private String orgStatus;            //可用状态          0：不可用    1可用
+	private String orgRemark;				//备注
 	
 	private List<UserModel> users;     //用户
 
@@ -31,54 +31,52 @@ public class OrganizationModel implements Serializable{
 		super();
 	}
 
-	public Integer getId() {
-		return id;
+	public Integer getOrgId() {
+		return orgId;
 	}
 
-
-	public void setId(Integer id) {
-		this.id = id;
+	public void setOrgId(Integer orgId) {
+		this.orgId = orgId;
 	}
 
-
-	public String getoName() {
-		return oName;
+	public String getOrgName() {
+		return orgName;
 	}
 
-	public void setoName(String oName) {
-		this.oName = oName;
+	public void setOrgName(String orgName) {
+		this.orgName = orgName;
 	}
 
-	public String getoAddress() {
-		return oAddress;
+	public String getOrgAddress() {
+		return orgAddress;
 	}
 
-	public void setoAddress(String oAddress) {
-		this.oAddress = oAddress;
+	public void setOrgAddress(String orgAddress) {
+		this.orgAddress = orgAddress;
 	}
 
-	public Integer getoPID() {
-		return oPID;
+	public Integer getOrgPid() {
+		return orgPid;
 	}
 
-	public void setoPID(Integer oPID) {
-		this.oPID = oPID;
+	public void setOrgPid(Integer orgPid) {
+		this.orgPid = orgPid;
 	}
 
-	public String getoStatus() {
-		return oStatus;
+	public String getOrgStatus() {
+		return orgStatus;
 	}
 
-	public void setoStatus(String oStatus) {
-		this.oStatus = oStatus;
+	public void setOrgStatus(String orgStatus) {
+		this.orgStatus = orgStatus;
 	}
 
-	public String getoRemark() {
-		return oRemark;
+	public String getOrgRemark() {
+		return orgRemark;
 	}
 
-	public void setoRemark(String oRemark) {
-		this.oRemark = oRemark;
+	public void setOrgRemark(String orgRemark) {
+		this.orgRemark = orgRemark;
 	}
 
 	public List<UserModel> getUsers() {
@@ -91,8 +89,8 @@ public class OrganizationModel implements Serializable{
 
 	@Override
 	public String toString() {
-		return "OrganizationModel [id=" + id + ", oName=" + oName + ", oAddress=" + oAddress + ", oPID=" + oPID
-				+ ", oStatus=" + oStatus + ", oRemark=" + oRemark + ", users=" + users + "]";
+		return "OrganizationModel [orgId=" + orgId + ", orgName=" + orgName + ", orgAddress=" + orgAddress + ", orgPid="
+				+ orgPid + ", orgStatus=" + orgStatus + ", orgRemark=" + orgRemark + ", users=" + users + "]";
 	}
 
 

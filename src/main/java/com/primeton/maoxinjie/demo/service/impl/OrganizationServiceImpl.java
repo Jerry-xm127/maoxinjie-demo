@@ -9,13 +9,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.primeton.maoxinjie.demo.constant.ResultCodeEnum;
 import com.primeton.maoxinjie.demo.dao.IOrganizationDao;
 import com.primeton.maoxinjie.demo.dao.IUserDao;
-import com.primeton.maoxinjie.demo.exception.BusiException;
+import com.primeton.maoxinjie.demo.exception.BusyException;
+import com.primeton.maoxinjie.demo.exception.ResultCodeEnum;
 import com.primeton.maoxinjie.demo.model.OrganizationModel;
 import com.primeton.maoxinjie.demo.model.UserModel;
 import com.primeton.maoxinjie.demo.service.IOrganizationService;
+import com.primeton.maoxinjie.demo.util.ResponseResultUtil;
 
 /**
  * 
@@ -43,28 +44,48 @@ public class OrganizationServiceImpl implements IOrganizationService {
 	 * @throws Exception
 	 */
 	@Override
-	public int createOrganization(OrganizationModel organizationModel) throws Exception {
-		int num = 0;
+	public ResponseResultUtil createOrganization(OrganizationModel organizationModel) throws Exception {
+		ResponseResultUtil responseResult = new ResponseResultUtil();
 		if(organizationModel == null) {
-			throw new BusiException(ResultCodeEnum.ORG_NULL_ERROR.getCode(),ResultCodeEnum.ORG_NULL_ERROR.getMessage());
+			throw new BusyException(ResultCodeEnum.ORG_NULL_ERROR.getCode(),ResultCodeEnum.ORG_NULL_ERROR.getMessage());
 		}
-		if(organizationDao.getOrganizationByOrgName(organizationModel.getoName()) != null) {
-			throw new BusiException(ResultCodeEnum.ORG_EXIST_ERROR.getCode(),ResultCodeEnum.ORG_EXIST_ERROR.getMessage());
+		if(organizationDao.getOrganizationByOrgName(organizationModel.getOrgName()) != null) {
+			throw new BusyException(ResultCodeEnum.ORG_EXIST_ERROR.getCode(),ResultCodeEnum.ORG_EXIST_ERROR.getMessage());
 		}
-			num = organizationDao.insertOrganization(organizationModel);
-		return num;
+		if(organizationDao.insertOrganization(organizationModel) > 0) {
+			responseResult = ResponseResultUtil.success();
+		}else {
+			responseResult = ResponseResultUtil.error();
+		}
+		return responseResult;
 	}
-
+	
 	/**
 	 * 
-	 * <p>Description: 批量删除组织机构数据</p> 
-	 * @param ids
+	 * <p>Description: 通过id单个删除组织机构</p> 
+	 * @param id
 	 * @return
 	 * @throws Exception
 	 */
 	@Override
-	public int removeOrganization(int[] ids) throws Exception {
-		return organizationDao.deleteOrganization(ids);
+	public ResponseResultUtil removeOrganizationById(int id) throws Exception {
+		ResponseResultUtil responseResult = new ResponseResultUtil();
+		//首先判断id对应的信息是否存在
+		OrganizationModel record = organizationDao.getOrganizationByID(id);
+		if(record == null) {
+			throw new BusyException(ResultCodeEnum.ID_ORG_EXIST_ERROR.getCode(),ResultCodeEnum.ID_ORG_EXIST_ERROR.getMessage());
+		}
+		//在判断该组织机构对应的有没有用户
+		List<UserModel> userList = userDao.queryUserByOID(id);
+		if(userList.size() > 0) {
+			throw new BusyException(ResultCodeEnum.ORG_USER_NOT_NULL_ERROR.getCode(), ResultCodeEnum.ORG_USER_NOT_NULL_ERROR.getMessage());
+		}
+		if (organizationDao.deleteOrganizationById(id) > 0) {
+			responseResult = ResponseResultUtil.success();
+		}else {
+			responseResult = ResponseResultUtil.error();
+		}
+		return responseResult;
 	}
 
 	/**
@@ -75,17 +96,21 @@ public class OrganizationServiceImpl implements IOrganizationService {
 	 * @throws Exception
 	 */
 	@Override
-	public int modifyOrganization(OrganizationModel organizationModel) throws Exception {
-		int num = 0;
+	public ResponseResultUtil modifyOrganization(OrganizationModel organizationModel) throws Exception {
+		ResponseResultUtil responseResult = new ResponseResultUtil();
 		if(organizationModel == null) {
-			throw new BusiException(ResultCodeEnum.ORG_NULL_ERROR.getCode(),ResultCodeEnum.ORG_NULL_ERROR.getMessage());
+			throw new BusyException(ResultCodeEnum.ORG_NULL_ERROR.getCode(),ResultCodeEnum.ORG_NULL_ERROR.getMessage());
 		}
-		OrganizationModel record = organizationDao.getOrganizationByID(organizationModel.getId());
-		if(record == null || record.getoName().equals(organizationModel.getoName())) {
-			throw new BusiException(ResultCodeEnum.ORG_EXIST_ERROR.getCode(),ResultCodeEnum.ORG_EXIST_ERROR.getMessage());
+		OrganizationModel record = organizationDao.getOrganizationByID(organizationModel.getOrgId());
+		if(record == null || record.getOrgName().equals(organizationModel.getOrgName())) {
+			throw new BusyException(ResultCodeEnum.ORG_EXIST_ERROR.getCode(),ResultCodeEnum.ORG_EXIST_ERROR.getMessage());
 		}
-			num = organizationDao.updateOrganization(organizationModel);
-		return num;
+		if (organizationDao.updateOrganization(organizationModel) > 0) {
+			responseResult = ResponseResultUtil.success();
+		}else {
+			responseResult = ResponseResultUtil.error();
+		}
+		return responseResult;
 	}
 
 	/**
@@ -96,33 +121,18 @@ public class OrganizationServiceImpl implements IOrganizationService {
 	 * @throws Exception
 	 */
 	@Override
-	public OrganizationModel getOrganizationByID(int id) throws Exception {
-		return organizationDao.getOrganizationByID(id);
+	public ResponseResultUtil getOrganizationByID(int id) throws Exception {
+		ResponseResultUtil responseResult = new ResponseResultUtil();
+		if (null != organizationDao.getOrganizationByID(id)) {
+			responseResult = ResponseResultUtil.success();
+			responseResult.put("data", organizationDao.getOrganizationByID(id));
+		}else {
+			responseResult = ResponseResultUtil.error();
+		}
+		return responseResult;
 	}
 
-	/**
-	 * 
-	 * <p>Description: 通过id单个删除组织机构</p> 
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	@Override
-	public int removeOrganizationById(int id) throws Exception {
-		int num = 0;
-		//首先判断id对应的信息是否存在
-		OrganizationModel record = organizationDao.getOrganizationByID(id);
-		if(record == null) {
-			throw new BusiException(ResultCodeEnum.ID_ORG_EXIST_ERROR.getCode(),ResultCodeEnum.ID_ORG_EXIST_ERROR.getMessage());
-		}
-		//在判断该组织机构对应的有没有用户
-		List<UserModel> userList = userDao.queryUserByOID(id);
-		if(userList.size() > 0) {
-			throw new BusiException(ResultCodeEnum.ORG_USER_NOT_NULL_ERROR.getCode(), ResultCodeEnum.ORG_USER_NOT_NULL_ERROR.getMessage());
-		}
-			num = organizationDao.deleteOrganizationById(id);
-		return num;
-	}
+
 
 	/**
 	 * 
@@ -134,12 +144,22 @@ public class OrganizationServiceImpl implements IOrganizationService {
 	 * @throws Exception
 	 */
 	@Override
-	public PageInfo<OrganizationModel> queryOrgByPage(int pageNo, int pageSize, OrganizationModel organizationModel)
+	public ResponseResultUtil queryOrgByPage(int pageNo, int pageSize, OrganizationModel organizationModel)
 			throws Exception {
 		//对于官方文档所说PageHelper方法调用后紧跟 MyBatis 查询方法，这就是安全的
 		PageHelper.startPage(pageNo, pageSize);
-		List<OrganizationModel> orgList = organizationDao.queryOrganizationByPage(organizationModel);
-	return new PageInfo<>(orgList);
+		ResponseResultUtil responseResult = new ResponseResultUtil();
+		//对于官方文档所说PageHelper方法调用后紧跟 MyBatis 查询方法，这就是安全的
+		PageHelper.startPage(pageNo, pageSize);
+		List<OrganizationModel> orgList = organizationDao.queryOrganizationByPage(organizationModel);;
+		PageInfo<OrganizationModel> pageInfo = new PageInfo<>(orgList);
+		if (pageInfo.getList().size() > 0) {
+			responseResult = ResponseResultUtil.success();
+			responseResult.put("data", pageInfo);
+		}else {
+			responseResult = ResponseResultUtil.error(ResultCodeEnum.NO_FIND_DATA.getCode(), ResultCodeEnum.NO_FIND_DATA.getMessage());
+		}
+	return responseResult;
 	}
 
 }

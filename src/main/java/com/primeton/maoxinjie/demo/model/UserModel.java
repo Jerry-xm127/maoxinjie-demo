@@ -14,97 +14,91 @@ import io.swagger.annotations.ApiModel;
 @JsonIgnoreProperties(ignoreUnknown=true)
 @ApiModel(description="用户对象user")
 public class UserModel implements Serializable{
-
+	
 	private static final long serialVersionUID = 8920689769707837446L;
 	
-	private Integer id;  			//主键
-	private String uName;  			//用户姓名
-	private String uAccount;		//用户账号
-	private String uPwd;			//密码
-	private Integer uAge;			//年龄
-	private String uSex;			//性别   0：女	1：男
-	private String uPhone;			//联系电话
-	private String uRemark;         //备注
-	private String uStatus;			//用户状态   0：不可用   1：可用
+	private Integer userId;  			//主键
+	private String userName;  			//用户姓名
+	private String userAccount;		//用户账号
+	private String userPwd;			//密码
+	private Integer userAge;			//年龄
+	private String userSex;			//性别   0：女	1：男
+	private String userPhone;			//联系电话
+	private String userRemark;         //备注
+	private String userStatus;			//用户状态   0：不可用   1：可用
 	
 	private OrganizationModel org;				//用户与组织机构关系
-	
-	public UserModel() {
-		super();
+
+	public Integer getUserId() {
+		return userId;
 	}
 
-	public Integer getId() {
-		return id;
+	public void setUserId(Integer userId) {
+		this.userId = userId;
 	}
 
-
-	public void setId(Integer id) {
-		this.id = id;
+	public String getUserName() {
+		return userName;
 	}
 
-
-	public String getuName() {
-		return uName;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
-	public void setuName(String uName) {
-		this.uName = uName;
+	public String getUserAccount() {
+		return userAccount;
 	}
 
-	public String getuAccount() {
-		return uAccount;
+	public void setUserAccount(String userAccount) {
+		this.userAccount = userAccount;
 	}
 
-	public void setuAccount(String uAccount) {
-		this.uAccount = uAccount;
+	public String getUserPwd() {
+		return userPwd;
 	}
 
-	public String getuPwd() {
-		return uPwd;
+	public void setUserPwd(String userPwd) {
+		this.userPwd = userPwd;
 	}
 
-	public void setuPwd(String uPwd) {
-		this.uPwd = uPwd;
+	public Integer getUserAge() {
+		return userAge;
 	}
 
-	public Integer getuAge() {
-		return uAge;
+	public void setUserAge(Integer userAge) {
+		this.userAge = userAge;
 	}
 
-	public void setuAge(Integer uAge) {
-		this.uAge = uAge;
+	public String getUserSex() {
+		return userSex;
 	}
 
-	public String getuSex() {
-		return uSex;
+	public void setUserSex(String userSex) {
+		this.userSex = userSex;
 	}
 
-	public void setuSex(String uSex) {
-		this.uSex = uSex;
+	public String getUserPhone() {
+		return userPhone;
 	}
 
-	public String getuPhone() {
-		return uPhone;
+	public void setUserPhone(String userPhone) {
+		this.userPhone = userPhone;
 	}
 
-	public void setuPhone(String uPhone) {
-		this.uPhone = uPhone;
+	public String getUserRemark() {
+		return userRemark;
 	}
 
-	public String getuRemark() {
-		return uRemark;
+	public void setUserRemark(String userRemark) {
+		this.userRemark = userRemark;
 	}
 
-	public void setuRemark(String uRemark) {
-		this.uRemark = uRemark;
+	public String getUserStatus() {
+		return userStatus;
 	}
 
-	public String getuStatus() {
-		return uStatus;
-	}
-
-	public void setuStatus(String uStatus) {
-		this.uStatus = uStatus;
+	public void setUserStatus(String userStatus) {
+		this.userStatus = userStatus;
 	}
 
 	public OrganizationModel getOrg() {
@@ -117,12 +111,10 @@ public class UserModel implements Serializable{
 
 	@Override
 	public String toString() {
-		return "UserModel [id=" + id + ", uName=" + uName + ", uAccount=" + uAccount + ", uPwd=" + uPwd + ", uAge="
-				+ uAge + ", uSex=" + uSex + ", uPhone=" + uPhone + ", uRemark=" + uRemark + ", uStatus=" + uStatus
-				+ ", org=" + org + "]";
+		return "UserModel [userId=" + userId + ", userName=" + userName + ", userAccount=" + userAccount + ", userPwd="
+				+ userPwd + ", userAge=" + userAge + ", userSex=" + userSex + ", userPhone=" + userPhone
+				+ ", userRemark=" + userRemark + ", userStatus=" + userStatus + ", org=" + org + "]";
 	}
 
-
-	
 	
 }

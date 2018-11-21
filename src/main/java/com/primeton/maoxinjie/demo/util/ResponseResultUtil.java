@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.primeton.maoxinjie.demo.constant.ResultCodeEnum;
+import com.primeton.maoxinjie.demo.exception.ResultCodeEnum;
 
 
 /**

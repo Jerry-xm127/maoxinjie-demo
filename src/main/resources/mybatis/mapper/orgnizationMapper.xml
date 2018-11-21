@@ -4,17 +4,17 @@
 
 <mapper namespace="com.primeton.maoxinjie.demo.dao.IOrganizationDao">
 	<resultMap type="OrganizationModel" id="resultListOrganization">
-		<id column="ID" property="id" />
-		<result column="ORG_NAME" property="oName" />
-		<result column="ORG_ADDRESS" property="oAddress" />
-		<result column="ORG_STATUS" property="oStatus" />
-		<result column="ORG_REMARK" property="oRemark" />
+		<id column="ID" property="orgId" />
+		<result column="ORG_NAME" property="orgName" />
+		<result column="ORG_ADDRESS" property="orgAddress" />
+		<result column="ORG_STATUS" property="orgStatus" />
+		<result column="ORG_REMARK" property="orgRemark" />
 		<collection property="users" ofType="UserModel" columnPrefix="u_">
-			<id property="id" column="ID" />
-			<result column="USER_NAME" property="uName" javaType="java.lang.String" jdbcType="VARCHAR"/>
-			<result column="USER_ACCOUNT" property="uAccount" javaType="java.lang.String" jdbcType="VARCHAR" />
-			<result column="USER_SEX" property="uSex" javaType="java.lang.String" jdbcType="VARCHAR" />
-			<result column="USER_PHONE" property="uPhone" javaType="java.lang.String" jdbcType="VARCHAR" />
+			<id property="userId" column="ID" />
+			<result column="USER_NAME" property="userName" javaType="java.lang.String" jdbcType="VARCHAR"/>
+			<result column="USER_ACCOUNT" property="userAccount" javaType="java.lang.String" jdbcType="VARCHAR" />
+			<result column="USER_SEX" property="userSex" javaType="java.lang.String" jdbcType="VARCHAR" />
+			<result column="USER_PHONE" property="userPhone" javaType="java.lang.String" jdbcType="VARCHAR" />
 		</collection>
 	</resultMap>
 	<sql id = "params"> 
@@ -23,7 +23,7 @@
 
 	<!-- 添加组织机构 -->
 	<insert id="insertOrganization" parameterType="OrganizationModel" useGeneratedKeys="true"
-		keyProperty="oID">
+		keyProperty="orgId">
 		INSERT INTO mxj_demo_organization (
 			ORG_NAME,
 			ORG_ADDRESS,
@@ -32,49 +32,38 @@
 			ORG_REMARK
 		)
 		VALUES
-		(#{oName},#{oAddress},#{oStatus},#{oPID},#{oRemark})
+		(#{orgName},#{orgAddress},#{orgStatus},#{orgPid},#{orgRemark})
 	</insert>
-	<!-- 带批量删除组织机构信息 -->
-	<delete id="deleteOrganization">
-		DELETE
-		FROM
-			mxj_demo_organization
-		WHERE
-			ID IN 
-			<foreach collection="array" item = "eachId" open="(" close=")" separator=",">
-        		#{eachId}       		
-        	</foreach>
-	</delete>
 	<!-- 通过id删除组织机构 -->
 	<delete id="deleteOrganizationById" parameterType="OrganizationModel">
 		DELETE
 		FROM
 			mxj_demo_organization
 		WHERE
-			ID=#{oID}
+			ID=#{orgId}
 	</delete>
     <!-- 修改组织机构信息 -->
     <update id="updateOrganization" parameterType="OrganizationModel">
         UPDATE mxj_demo_organization
         <set>
-	        <if test="oName != null">
-	        	ORG_NAME=#{oName},
+	        <if test="orgName != null">
+	        	ORG_NAME=#{orgName},
 	        </if>
-	        <if test="oAddress != null">
-	        	ORG_ADDRESS=#{oAddress},
+	        <if test="orgAddress != null">
+	        	ORG_ADDRESS=#{orgAddress},
 	        </if>
-	        <if test="oStatus != null">
-	        	ORG_STATUS=#{oStatus},
+	        <if test="orgStatus != null">
+	        	ORG_STATUS=#{orgStatus},
 	        </if>
-	        <if test="oPID != null">
-	        	ORG_PID=#{oPID},
+	        <if test="orgPid != null">
+	        	ORG_PID=#{orgPid},
 	        </if>
-	        <if test="oRemark != null">
-	        	ORG_REMARK=#{oRemark}
+	        <if test="orgRemark != null">
+	        	ORG_REMARK=#{orgRemark}
 	        </if>
         </set>
         <where>
-        	ID=#{id}
+        	ID=#{orgId}
         </where>
     </update>
 	<!-- 通过id获取组织机构信息 -->
@@ -84,7 +73,7 @@
 		FROM
 			mxj_demo_organization 
 		WHERE 
-			ID = #{id}
+			ID = #{orgId}
 	</select>
 	<!-- 通过名称获取组织机构信息 -->
 	<select id="getOrganizationByOrgName" parameterType="String" resultMap="resultListOrganization">
@@ -102,8 +91,8 @@
 		FROM
 			mxj_demo_organization
 		<where>
-			<if test="oName != null">
-				AND ORG_NAME like CONCAT('%',#{oName},'%')
+			<if test="orgName != null">
+				AND ORG_NAME like CONCAT('%',#{orgName},'%')
 			</if>
 		</where>
 		ORDER BY ID

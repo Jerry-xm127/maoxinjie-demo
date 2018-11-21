@@ -1,4 +1,4 @@
-package com.primeton.maoxinjie.demo.constant;
+package com.primeton.maoxinjie.demo.exception;
 
 /**
  * 存放异常码的常量
@@ -7,7 +7,7 @@ package com.primeton.maoxinjie.demo.constant;
  */
 public enum ResultCodeEnum {
 
-	SUCCESS(0000,"操作成功"),
+	SUCCESS(200,"操作成功"),
 	ERROR(0001,"操作失败"),
 	SYSTEM_ERROR(1000,"系统错误"),
 	ACCOUNT_PWD_ERROR(2000,"用户名或密码错误"),

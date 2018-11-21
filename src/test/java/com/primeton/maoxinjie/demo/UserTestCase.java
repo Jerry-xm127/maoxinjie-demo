@@ -14,9 +14,11 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.github.pagehelper.PageInfo;
+import com.primeton.maoxinjie.demo.controller.UserController;
 import com.primeton.maoxinjie.demo.dao.IUserDao;
 import com.primeton.maoxinjie.demo.model.UserModel;
 import com.primeton.maoxinjie.demo.service.IUserService;
+import com.primeton.maoxinjie.demo.util.ResponseResultUtil;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -28,9 +30,7 @@ public class UserTestCase {
 	private Logger log = LoggerFactory.getLogger(UserTestCase.class);
 	
 	@Autowired
-	private IUserService userService;
-	@Autowired
-	private IUserDao userDao;
+	private UserController userController;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -41,14 +41,15 @@ public class UserTestCase {
 	 * <p>Description: 测试用户模块</p>
 	 * @parameter
 	 * @return
+	 * @throws Exception 
 	 */
 	@Test
-	public void testUser() {
-		//this.testCreateUser();
+	public void testUser() throws Exception {
+		this.testCreateUser();
 		//this.testDeleteUser();
 		//this.testUpdateUser();
 		//this.testGetUserById();
-		this.testQueryUser();
+		//this.testQueryUser();
 		
 	}
 
@@ -58,20 +59,15 @@ public class UserTestCase {
 	 * @parameter
 	 * @return
 	 */
-	public void testCreateUser(){
+	public void testCreateUser() throws Exception{
 		UserModel userModel = new UserModel();
-		userModel.setuAccount("ceshiten");
-		userModel.setuName("测试者10");
-		userModel.setuPwd("123456");
-		userModel.setuAge(15);
-		userModel.setuSex("1");
-		int num = 0;
-		try {
-			num = userService.createUser(userModel);
-		} catch (Exception e) {
-			log.error("数据库操作异常",e);
-		}
-		Assert.assertNotEquals(0, num);
+		userModel.setUserAccount("ceshiseven");
+		userModel.setUserName("测试者7");
+		userModel.setUserPwd("123456");
+		userModel.setUserAge(25);
+		userModel.setUserSex("1");
+		ResponseResultUtil responseResult = userController.createUser(userModel);
+		Assert.assertEquals("操作成功", responseResult.get("msg"));
 	}
 
 	/**
@@ -80,15 +76,10 @@ public class UserTestCase {
 	 * @parameter
 	 * @return
 	 */
-	public void testDeleteUser() {
-		int id = 16;
-		int result = 0;
-		try {
-			result = userService.removeUserById(id);
-		} catch (Exception e) {
-			log.error("数据库操作异常",e);
-		}
-		Assert.assertNotEquals(0, result);
+	public void testDeleteUser() throws Exception{
+		int id = 24;
+		ResponseResultUtil responseResult = userController.removeUser(id);
+		Assert.assertEquals("操作成功", responseResult.get("msg"));
 	}
 	
 	/**
@@ -97,21 +88,16 @@ public class UserTestCase {
 	 * @parameter
 	 * @return
 	 */
-	public void testUpdateUser() {
+	public void testUpdateUser() throws Exception{
 		UserModel userModel = new UserModel();
-		userModel.setId(20);
-		userModel.setuAccount("ceshiershi");
-		userModel.setuName("测试者19");
-		userModel.setuAge(16);;
-		userModel.setuSex("1");
-		userModel.setuStatus("1");
-		int result = 0;
-		try {
-			result = userService.modifyUser(userModel);
-		} catch (Exception e) {
-			log.error("数据库操作异常",e);
-		}
-		Assert.assertNotEquals(0, result);
+		userModel.setUserId(25);
+		userModel.setUserAccount("ceshioneUpdate");
+		userModel.setUserName("测试者1修改");
+		userModel.setUserAge(29);;
+		userModel.setUserSex("0");
+		userModel.setUserStatus("1");
+		ResponseResultUtil responseResult = userController.modifyUser(userModel.getUserId(), userModel);
+		Assert.assertEquals("操作成功", responseResult.get("msg"));
 	}
 	
 	/**
@@ -119,16 +105,12 @@ public class UserTestCase {
 	 * <p>Description: 测试根据id查询用户</p>
 	 * @parameter
 	 * @return
+	 * @throws Exception 
 	 */
-	public void testGetUserById() {
-		int id = 223;
-		UserModel result = new UserModel();
-		try {
-			result = userService.getUserByID(id);
-		} catch (Exception e) {
-			log.error("数据库操作异常",e);
-		}
-		Assert.assertNotNull("查询失败", result);;
+	public void testGetUserById() throws Exception {
+		int id = 25;
+		ResponseResultUtil responseResult = userController.getUser(id);
+		Assert.assertNotNull(responseResult.get("data"));;
 	}
 	
 	/**
@@ -137,22 +119,12 @@ public class UserTestCase {
 	 * @parameter
 	 * @return
 	 */
-	public void testQueryUser() {
+	public void testQueryUser() throws Exception{
 		int pageNo = 1;
 		int pageSize = 5;
-		UserModel searchUser = new UserModel();
-		String userName = "孙";
-		String sex = "0";
-		searchUser.setuName(userName);
-		searchUser.setuSex(sex);
-		PageInfo<UserModel> pages = null;
-		UserModel record = new UserModel();
-		try {
-			pages = userService.queryUserByPage(pageNo, pageSize, searchUser);
-			record = pages.getList().get(0);
-		} catch (Exception e) {
-			log.error("数据库操作异常",e);
-		}
-		Assert.assertNotNull("分页查询异常", record);
+		String userName = null;
+		String sex = null;
+		ResponseResultUtil responseResult = userController.queryUsers(pageNo, pageSize, userName, sex);
+		Assert.assertNotNull(responseResult.get("data"));
 	}
 }

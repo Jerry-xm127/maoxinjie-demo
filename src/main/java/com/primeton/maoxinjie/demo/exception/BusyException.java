@@ -8,7 +8,7 @@ package com.primeton.maoxinjie.demo.exception;
  * @date 2018年11月20日 
  *
  */
-public class BusiException extends RuntimeException {
+public class BusyException extends RuntimeException {
 
     /**
      *
@@ -17,7 +17,7 @@ public class BusiException extends RuntimeException {
 
     
 
-    public BusiException(Integer code, String message) {
+    public BusyException(Integer code, String message) {
         super(message);
     }
 

@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.primeton.maoxinjie.demo.controller.UserController;
 import com.primeton.maoxinjie.demo.util.ResponseResultUtil;
 
 /**
@@ -18,12 +19,12 @@ import com.primeton.maoxinjie.demo.util.ResponseResultUtil;
 @RestControllerAdvice
 public class GlobalDefaultExceptionHandler {
 	
-	private Logger log = LoggerFactory.getLogger(GlobalDefaultExceptionHandler.class);
+	private static final Logger log = LoggerFactory.getLogger(GlobalDefaultExceptionHandler.class);
 	
     /**
      * 处理的异常类型
      */
-    @ExceptionHandler(value = BusiException.class)
+    @ExceptionHandler(value = BusyException.class)
     public ResponseResultUtil defaultErrorHandler(HttpServletRequest req, Exception e) {
     	 log.error("业务异常:", e);
          return ResponseResultUtil.error("业务异常:" + e.getMessage());

@@ -2,6 +2,8 @@ package com.primeton.maoxinjie.demo.service.impl;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,11 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.primeton.maoxinjie.demo.constant.ResultCodeEnum;
 import com.primeton.maoxinjie.demo.dao.IUserDao;
-import com.primeton.maoxinjie.demo.exception.BusiException;
+import com.primeton.maoxinjie.demo.exception.BusyException;
+import com.primeton.maoxinjie.demo.exception.ResultCodeEnum;
 import com.primeton.maoxinjie.demo.model.UserModel;
 import com.primeton.maoxinjie.demo.service.IUserService;
+import com.primeton.maoxinjie.demo.util.ResponseResultUtil;
 import com.primeton.maoxinjie.demo.util.StrUtil;
 
 /**
@@ -23,7 +26,7 @@ import com.primeton.maoxinjie.demo.util.StrUtil;
  */
 @Service
 @JsonIgnoreProperties(ignoreUnknown=true)
-@Transactional
+@Transactional(rollbackFor=Exception.class)
 public class UserServiceImpl implements IUserService {
 
 	@Autowired
@@ -37,30 +40,44 @@ public class UserServiceImpl implements IUserService {
 	 * @throws Exception
 	 */
 	@Override
-	public int createUser(UserModel userModel) throws Exception {
-		int num = 0;
+	public ResponseResultUtil createUser(UserModel userModel) throws Exception {
+		ResponseResultUtil responseResult = new ResponseResultUtil();
 		//判断必要的属性为空
-		if(StrUtil.isNull(userModel.getuAccount()) || StrUtil.isNull(userModel.getuPwd()) || StrUtil.isNull(userModel.getuName())) {
-			throw new BusiException(ResultCodeEnum.ACCOUNT_PWD_USERNAME_ERROR.getCode(),ResultCodeEnum.ACCOUNT_PWD_USERNAME_ERROR.getMessage());
+		if(StrUtil.isNull(userModel.getUserAccount()) || StrUtil.isNull(userModel.getUserPwd()) || StrUtil.isNull(userModel.getUserName())) {
+			throw new BusyException(ResultCodeEnum.ACCOUNT_PWD_USERNAME_ERROR.getCode(),ResultCodeEnum.ACCOUNT_PWD_USERNAME_ERROR.getMessage());
 		}
 		//对于创建用户来说先判断该用户是否已经存在
-		if(userDao.getUserByName(userModel.getuName()) != null) {
-			throw new BusiException(ResultCodeEnum.USER_EXIST_ERROR.getCode(),ResultCodeEnum.USER_EXIST_ERROR.getMessage());
+		if(userDao.getUserByUserAccount(userModel.getUserAccount()) != null) {
+			throw new BusyException(ResultCodeEnum.USER_EXIST_ERROR.getCode(),ResultCodeEnum.USER_EXIST_ERROR.getMessage());
 		}
-		num = userDao.insertUser(userModel);
-		return num;
+		if(userDao.insertUser(userModel) > 0) {
+			responseResult = ResponseResultUtil.success();
+		}else {
+			responseResult = ResponseResultUtil.error();
+		}
+		return responseResult;
 	}
-
+	
 	/**
-	 * 
-	 * <p>Description: 通过id批量删除用户</p> 
-	 * @param ids
+	 * 通过id单个删除用户信息
+	 * <p>Description: </p> 
+	 * @param id
 	 * @return
 	 * @throws Exception
 	 */
 	@Override
-	public int removeUserForBatch(int[] ids) throws Exception {
-		return userDao.deleteUserForBatch(ids);
+	public ResponseResultUtil removeUserById(int id) throws Exception {
+		ResponseResultUtil responseResult = new ResponseResultUtil();
+		UserModel record = userDao.getUserByID(id);
+		if(record == null) {
+			throw new BusyException(ResultCodeEnum.ID_USER_EXIST_ERROR.getCode(),ResultCodeEnum.ID_USER_EXIST_ERROR.getMessage());
+		}
+		if (userDao.deleteUserById(id) > 0) {
+			responseResult = ResponseResultUtil.success();
+		}else {
+			responseResult = ResponseResultUtil.error();
+		}
+		return responseResult;
 	}
 
 	/**
@@ -71,17 +88,23 @@ public class UserServiceImpl implements IUserService {
 	 * @throws Exception
 	 */
 	@Override
-	public int modifyUser(UserModel userModel) throws Exception {
-		int num = 0;
-		if( userModel == null) {
-			throw new BusiException(ResultCodeEnum.USER_NULL_ERROR.getCode(),ResultCodeEnum.USER_NULL_ERROR.getMessage());
+	public ResponseResultUtil modifyUser(UserModel userModel) throws Exception {
+		ResponseResultUtil responseResult = new ResponseResultUtil();
+		if(userModel == null) {
+			throw new BusyException(ResultCodeEnum.USER_NULL_ERROR.getCode(),ResultCodeEnum.USER_NULL_ERROR.getMessage());
 		}
-		UserModel record = userDao.getUserByID(userModel.getId());
-		if(record == null || record.getuName().equals(userModel.getuName())) {
-			throw new BusiException(ResultCodeEnum.USER_EXIST_ERROR.getCode(),ResultCodeEnum.USER_EXIST_ERROR.getMessage());
+		UserModel record = userDao.getUserByID(userModel.getUserId());
+		if(record == null ) {
+			throw new BusyException(ResultCodeEnum.USER_NULL_ERROR.getCode(),ResultCodeEnum.USER_NULL_ERROR.getMessage());
+		}else if(record.getUserName().equals(userModel.getUserName())){
+			throw new BusyException(ResultCodeEnum.USER_EXIST_ERROR.getCode(),ResultCodeEnum.USER_EXIST_ERROR.getMessage());
 		}
-			num = userDao.updateUser(userModel);
-		return num;
+		if (userDao.updateUser(userModel) > 0) {
+			responseResult = ResponseResultUtil.success();
+		}else {
+			responseResult = ResponseResultUtil.error();
+		}
+		return responseResult;
 	}
 
 	/**
@@ -93,11 +116,17 @@ public class UserServiceImpl implements IUserService {
 	 * @throws Exception
 	 */
 	@Override
-	public UserModel getUserByAccountAndPwd(String account, String pwd) throws Exception {
-		UserModel userModel = new UserModel();
-		userModel.setuAccount(account);
-		userModel.setuPwd(pwd);
-		return userDao.getUserByAccountAndPwd(userModel);
+	public ResponseResultUtil getUserByAccountAndPwd(UserModel userModel,HttpSession httpSession) throws Exception {
+		ResponseResultUtil responseResult = new ResponseResultUtil();
+		UserModel record = userDao.getUserByAccountAndPwd(userModel);
+		if (null != record) {
+			responseResult = ResponseResultUtil.success();
+			responseResult.put("data", record);
+			httpSession.setAttribute("user", record);
+		}else {
+			responseResult = ResponseResultUtil.error(ResultCodeEnum.ACCOUNT_PWD_ERROR.getCode(), ResultCodeEnum.ACCOUNT_PWD_ERROR.getMessage());
+		}
+		return responseResult;
 	}
 
 	/**
@@ -108,27 +137,19 @@ public class UserServiceImpl implements IUserService {
 	 * @throws Exception
 	 */
 	@Override
-	public UserModel getUserByID(int id) throws Exception {
-		return userDao.getUserByID(id);
+	public ResponseResultUtil getUserByID(int id) throws Exception {
+		ResponseResultUtil responseResult = new ResponseResultUtil();
+		UserModel record = userDao.getUserByID(id);
+		if (null != record) {
+			responseResult = ResponseResultUtil.success();
+			responseResult.put("data", record);
+		}else {
+			responseResult = ResponseResultUtil.error(ResultCodeEnum.NO_FIND_DATA.getCode(), ResultCodeEnum.NO_FIND_DATA.getMessage());
+		}
+		return responseResult;
 	}
 
-	/**
-	 * 通过id单个删除用户信息
-	 * <p>Description: </p> 
-	 * @param id
-	 * @return
-	 * @throws Exception
-	 */
-	@Override
-	public int removeUserById(int id) throws Exception {
-		int num = 0;
-		UserModel record = userDao.getUserByID(id);
-		if(record == null) {
-			throw new BusiException(ResultCodeEnum.ID_USER_EXIST_ERROR.getCode(),ResultCodeEnum.ID_USER_EXIST_ERROR.getMessage());
-		}
-			num = userDao.deleteUserById(id);
-		return num;
-	}
+
 
 	/**
 	 * 
@@ -138,8 +159,8 @@ public class UserServiceImpl implements IUserService {
 	 * @throws Exception
 	 */
 	@Override
-	public int getPersonCount(UserModel userModel) throws Exception {
-		return userDao.queryPersonCount(userModel);
+	public int countUser(UserModel userModel) throws Exception {
+		return userDao.countUser(userModel);
 	}
 
 	/**
@@ -152,13 +173,20 @@ public class UserServiceImpl implements IUserService {
 	 * @throws Exception
 	 */
 	@Override
-	public PageInfo<UserModel> queryUserByPage(int pageNo, int pageSize, UserModel userModel) throws Exception {
-		//对于官方文档所说PageHelper方法调用后紧跟 MyBatis 查询方法，这就是安全的
+	public ResponseResultUtil queryUserByPage(int pageNo, int pageSize, UserModel userModel) throws Exception {
+		ResponseResultUtil responseResult = new ResponseResultUtil();
+			//对于官方文档所说PageHelper方法调用后紧跟 MyBatis 查询方法，这就是安全的
 			PageHelper.startPage(pageNo, pageSize);
 			List<UserModel> userList = userDao.queryUserByPage(userModel);
-		return new PageInfo<>(userList);
+			PageInfo<UserModel> pageInfo = new PageInfo<>(userList);
+			if (pageInfo.getList().size() > 0) {
+				responseResult = ResponseResultUtil.success();
+				responseResult.put("data", pageInfo);
+			}else {
+				responseResult = ResponseResultUtil.error(ResultCodeEnum.NO_FIND_DATA.getCode(), ResultCodeEnum.NO_FIND_DATA.getMessage());
+			}
+		return responseResult;
 	}
-
 
 
 }
