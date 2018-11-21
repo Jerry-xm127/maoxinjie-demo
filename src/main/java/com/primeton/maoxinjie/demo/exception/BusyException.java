@@ -10,12 +10,7 @@ package com.primeton.maoxinjie.demo.exception;
  */
 public class BusyException extends RuntimeException {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
-
-    
 
     public BusyException(Integer code, String message) {
         super(message);

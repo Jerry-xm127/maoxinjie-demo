@@ -2,8 +2,6 @@ package com.primeton.maoxinjie.demo.controller;
 
 import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,9 +10,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.github.pagehelper.PageInfo;
-import com.primeton.maoxinjie.demo.exception.BusyException;
-import com.primeton.maoxinjie.demo.exception.ResultCodeEnum;
 import com.primeton.maoxinjie.demo.model.UserModel;
 import com.primeton.maoxinjie.demo.service.IUserService;
 import com.primeton.maoxinjie.demo.util.ResponseResultUtil;
@@ -38,7 +33,15 @@ public class UserController {
 	@Autowired
 	public IUserService userService;
 	
-	
+	/**
+	 * 
+	 * <p>Description: 创建用户</p>
+	 * @parameter
+	 * @return 
+	 * @param userModel
+	 * @return
+	 * @throws Exception
+	 */
 	@ApiOperation(value="添加用户信息",notes="添加用户信息",response=ResponseResultUtil.class)
 	@ApiImplicitParams({
 		@ApiImplicitParam(name="userModel",value="用户信息"),
@@ -48,26 +51,64 @@ public class UserController {
 		return userService.createUser(userModel);
 	}
 	
+	/**
+	 * 
+	 * <p>Description: 根据id删除用户</p>
+	 * @parameter
+	 * @return 
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
 	@ApiOperation(value="根据id删除用户信息",notes="删除用户信息",response=ResponseResultUtil.class)
 	@RequestMapping(value="/{id}",method=RequestMethod.DELETE)
 	public ResponseResultUtil removeUser(@PathVariable("id") int id) throws Exception {
 		return userService.removeUserById(id);
 	}
 	
+	/**
+	 * 
+	 * <p>Description: 根据id修改用户</p>
+	 * @parameter
+	 * @return 
+	 * @param id
+	 * @param userModel
+	 * @return
+	 * @throws Exception
+	 */
 	@ApiOperation(value="通过id修改",notes="通过id修改用户信息",response=ResponseResultUtil.class)
 	@RequestMapping(value="/{id}",method=RequestMethod.PUT)
 	public ResponseResultUtil modifyUser(@PathVariable("id") int id, @RequestBody UserModel userModel) throws Exception {
 		return userService.modifyUser(userModel);
 	}
 	
+	/**
+	 * 
+	 * <p>Description: 根据id获取单个用户信息</p>
+	 * @parameter
+	 * @return 
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
 	@ApiOperation(value="通过id获取",notes="通过id获取",response=ResponseResultUtil.class)
 	@RequestMapping(value="/{id}",method=RequestMethod.GET)
 	public ResponseResultUtil getUser(@PathVariable("id") int id) throws Exception {
 		return userService.getUserByID(id);
 	}
-	
 
-	
+	/**
+	 * 
+	 * <p>Description: 分页+搜索查询获取用户</p>
+	 * @parameter
+	 * @return 
+	 * @param pageNo
+	 * @param pageSize
+	 * @param userName
+	 * @param sex
+	 * @return
+	 * @throws Exception
+	 */
 	@ApiOperation(value = "分页+搜索获取用户信息", notes="模糊查询及分页显示",response=ResponseResultUtil.class)
 	@RequestMapping(value="/",method=RequestMethod.GET)
 	public ResponseResultUtil queryUsers(@RequestParam(value="pageNo",defaultValue="1") int pageNo, 
@@ -80,6 +121,16 @@ public class UserController {
 		return userService.queryUserByPage(pageNo, pageSize, serachUser);
 	}
 	
+	/**
+	 * 
+	 * <p>Description: 用户登录验证</p>
+	 * @parameter
+	 * @return 
+	 * @param userModel
+	 * @param httpSession
+	 * @return
+	 * @throws Exception
+	 */
 	@ApiOperation(value="根据账号密码登录",notes="验证登录是否正确",response=ResponseResultUtil.class)
 	@ApiImplicitParams({
 			@ApiImplicitParam(name="userModel",value="用户信息")})

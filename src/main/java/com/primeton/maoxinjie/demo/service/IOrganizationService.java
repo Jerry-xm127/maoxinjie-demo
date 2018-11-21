@@ -3,16 +3,70 @@ package com.primeton.maoxinjie.demo.service;
 import com.primeton.maoxinjie.demo.model.OrganizationModel;
 import com.primeton.maoxinjie.demo.util.ResponseResultUtil;
 
+/**
+ * 
+ * <p>Title: IOrganizationService</p>
+ * <p>Description: 组织机构service接口定义</p>  
+ * @author Jerry
+ * @date 2018年11月21日 
+ *
+ */
 public interface IOrganizationService {
 
-	//创建一个组织机构信息
+	/**
+	 * 
+	 * <p>Description: 创建一个组织机构信息</p>
+	 * @parameter
+	 * @return 
+	 * @param organizationModel
+	 * @return
+	 * @throws Exception
+	 */
 	ResponseResultUtil createOrganization(OrganizationModel organizationModel) throws Exception;
-	//通过id删除组织机构
+	
+	/**
+	 * 
+	 * <p>Description: 通过id删除组织机构</p>
+	 * @parameter
+	 * @return 
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
 	ResponseResultUtil removeOrganizationById(int id) throws Exception;
-	//修改组织机构
+	
+	/**
+	 * 
+	 * <p>Description: 修改组织机构</p>
+	 * @parameter
+	 * @return 
+	 * @param organizationModel
+	 * @return
+	 * @throws Exception
+	 */
 	ResponseResultUtil modifyOrganization(OrganizationModel organizationModel) throws Exception;
-	//通过id获取组织机构详情
+	
+	/**
+	 * 
+	 * <p>Description: 通过id获取组织机构详情</p>
+	 * @parameter
+	 * @return 
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
 	ResponseResultUtil getOrganizationByID(int id) throws Exception;
-	//分页+搜索查询
+	
+	/**
+	 * 
+	 * <p>Description: 分页+搜索查询</p>
+	 * @parameter
+	 * @return 
+	 * @param pageNo
+	 * @param pageSize
+	 * @param organizationModel
+	 * @return
+	 * @throws Exception
+	 */
 	ResponseResultUtil queryOrgByPage(int pageNo, int pageSize, OrganizationModel organizationModel) throws Exception;
 }

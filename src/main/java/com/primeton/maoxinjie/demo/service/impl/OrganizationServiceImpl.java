@@ -21,14 +21,14 @@ import com.primeton.maoxinjie.demo.util.ResponseResultUtil;
 /**
  * 
  * <p>Title: OrganizationServiceImpl</p>
- * <p>Description: </p>  
+ * <p>Description: 组织机构管理service接口实现</p>  
  * @author Jerry
  * @date 2018年11月16日 
  *
  */
 @Service
 @JsonIgnoreProperties(ignoreUnknown=true)
-@Transactional
+@Transactional(rollbackFor=Exception.class)
 public class OrganizationServiceImpl implements IOrganizationService {
 	
 	@Autowired
@@ -102,7 +102,9 @@ public class OrganizationServiceImpl implements IOrganizationService {
 			throw new BusyException(ResultCodeEnum.ORG_NULL_ERROR.getCode(),ResultCodeEnum.ORG_NULL_ERROR.getMessage());
 		}
 		OrganizationModel record = organizationDao.getOrganizationByID(organizationModel.getOrgId());
-		if(record == null || record.getOrgName().equals(organizationModel.getOrgName())) {
+		if(record == null) {
+			throw new BusyException(ResultCodeEnum.ID_ORG_EXIST_ERROR.getCode(),ResultCodeEnum.ID_ORG_EXIST_ERROR.getMessage());
+		}else if (record.getOrgName().equals(organizationModel.getOrgName())) {
 			throw new BusyException(ResultCodeEnum.ORG_EXIST_ERROR.getCode(),ResultCodeEnum.ORG_EXIST_ERROR.getMessage());
 		}
 		if (organizationDao.updateOrganization(organizationModel) > 0) {
@@ -132,8 +134,6 @@ public class OrganizationServiceImpl implements IOrganizationService {
 		return responseResult;
 	}
 
-
-
 	/**
 	 * 
 	 * <p>Description: 组织机构的分页+搜索查询</p> 
@@ -159,7 +159,7 @@ public class OrganizationServiceImpl implements IOrganizationService {
 		}else {
 			responseResult = ResponseResultUtil.error(ResultCodeEnum.NO_FIND_DATA.getCode(), ResultCodeEnum.NO_FIND_DATA.getMessage());
 		}
-	return responseResult;
+		return responseResult;
 	}
 
 }

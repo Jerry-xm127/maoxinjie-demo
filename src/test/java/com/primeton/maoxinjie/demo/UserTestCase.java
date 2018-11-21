@@ -36,13 +36,8 @@ public class UserTestCase {
 	public void setUp() throws Exception {
 		mvc = MockMvcBuilders.webAppContextSetup(context).build(); // 构造MockMvc
 	}
-	/**
-	 * 
-	 * <p>Description: 测试用户模块</p>
-	 * @parameter
-	 * @return
-	 * @throws Exception 
-	 */
+	
+	
 	@Test
 	public void testUser() throws Exception {
 		this.testCreateUser();
@@ -53,12 +48,6 @@ public class UserTestCase {
 		
 	}
 
-	/**
-	 * 
-	 * <p>Description: 测试添加用户</p>
-	 * @parameter
-	 * @return
-	 */
 	public void testCreateUser() throws Exception{
 		UserModel userModel = new UserModel();
 		userModel.setUserAccount("ceshiseven");
@@ -69,25 +58,13 @@ public class UserTestCase {
 		ResponseResultUtil responseResult = userController.createUser(userModel);
 		Assert.assertEquals("操作成功", responseResult.get("msg"));
 	}
-
-	/**
-	 * 
-	 * <p>Description: 测试删除用户</p>
-	 * @parameter
-	 * @return
-	 */
+	
 	public void testDeleteUser() throws Exception{
 		int id = 24;
 		ResponseResultUtil responseResult = userController.removeUser(id);
 		Assert.assertEquals("操作成功", responseResult.get("msg"));
 	}
 	
-	/**
-	 * 
-	 * <p>Description: 测试修改用户</p>
-	 * @parameter
-	 * @return
-	 */
 	public void testUpdateUser() throws Exception{
 		UserModel userModel = new UserModel();
 		userModel.setUserId(25);
@@ -100,25 +77,12 @@ public class UserTestCase {
 		Assert.assertEquals("操作成功", responseResult.get("msg"));
 	}
 	
-	/**
-	 * 
-	 * <p>Description: 测试根据id查询用户</p>
-	 * @parameter
-	 * @return
-	 * @throws Exception 
-	 */
 	public void testGetUserById() throws Exception {
 		int id = 25;
 		ResponseResultUtil responseResult = userController.getUser(id);
 		Assert.assertNotNull(responseResult.get("data"));;
 	}
 	
-	/**
-	 * 
-	 * <p>Description: 分页+搜索用户的测试</p>
-	 * @parameter
-	 * @return
-	 */
 	public void testQueryUser() throws Exception{
 		int pageNo = 1;
 		int pageSize = 5;

@@ -20,7 +20,7 @@ import com.primeton.maoxinjie.demo.util.ResponseResultUtil;
 import com.primeton.maoxinjie.demo.util.StrUtil;
 
 /**
- * 用户管理服务
+ * 用户管理service接口实现
  * @author MAIBENBEN
  *
  */
@@ -149,8 +149,6 @@ public class UserServiceImpl implements IUserService {
 		return responseResult;
 	}
 
-
-
 	/**
 	 * 
 	 * <p>Description: 获取用户的数量</p> 
@@ -187,6 +185,4 @@ public class UserServiceImpl implements IUserService {
 			}
 		return responseResult;
 	}
-
-
 }

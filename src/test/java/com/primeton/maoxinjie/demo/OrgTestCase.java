@@ -13,9 +13,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.github.pagehelper.PageInfo;
+import com.primeton.maoxinjie.demo.controller.OrganizationController;
 import com.primeton.maoxinjie.demo.model.OrganizationModel;
-import com.primeton.maoxinjie.demo.service.IOrganizationService;
+import com.primeton.maoxinjie.demo.util.ResponseResultUtil;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class OrgTestCase {
@@ -26,7 +26,7 @@ public class OrgTestCase {
 	private Logger log = LoggerFactory.getLogger(OrgTestCase.class);
 	
 	@Autowired
-	private IOrganizationService orgService;
+	private OrganizationController orgController;
 
 	@Before
 	public void setUp() throws Exception {
@@ -34,111 +34,52 @@ public class OrgTestCase {
 	}
 	
 	
-//	@Test
-//	public void testOrg() {
-//		//this.testCreateOrg();
-//		//this.testDeleteOrg();
-//		//this.testUpdateOrg();
-//		//this.testGetOrgById();
-//		this.testQueryOrg();
-//	}
-//	
-//	/**
-//	 * 
-//	 * <p>Description: 测试创建组织机构</p>
-//	 * @parameter
-//	 * @return
-//	 */
-//	public void testCreateOrg(){
-//		int num = 0;
-//		OrganizationModel organizationModel = new OrganizationModel();
-//		organizationModel.setoName("北方金融事业部");
-//		organizationModel.setoAddress("上海浦东");
-//		organizationModel.setoStatus("1");
-//		try {
-//			num = orgService.createOrganization(organizationModel);
-//		} catch (Exception e) {
-//			log.error("数据库操作异常",e);
-//		}
-//		Assert.assertNotEquals(0, num);
-//	}
-//	
-//	/**
-//	 * 
-//	 * <p>Description: 测试删除组织机构</p>
-//	 * @parameter
-//	 * @return
-//	 */
-//	public void testDeleteOrg() {
-//		int id = 2;
-//		int result = 0;
-//		try {
-//			result = orgService.removeOrganizationById(id);
-//		} catch (Exception e) {
-//			log.error("数据库操作异常",e);
-//		}
-//		Assert.assertNotEquals(0, result);
-//	}
-//	
-//	/**
-//	 * 
-//	 * <p>Description: 测试修改组织机构</p>
-//	 * @parameter
-//	 * @return
-//	 */
-//	public void testUpdateOrg() {
-//		OrganizationModel organizationModel = new OrganizationModel();
-//		organizationModel.setoName("金融事业部");
-//		organizationModel.setoAddress("上海浦东");
-//		organizationModel.setoStatus("2");
-//		organizationModel.setId(2);
-//		int result = 0;
-//		try {
-//			result = orgService.modifyOrganization(organizationModel);
-//		} catch (Exception e) {
-//			log.error("数据库操作异常",e);
-//		}
-//		Assert.assertNotEquals(0, result);
-//	}
-//	
-//	/**
-//	 * 
-//	 * <p>Description: 测试根据id查询信息</p>
-//	 * @parameter
-//	 * @return
-//	 */
-//	public void testGetOrgById() {
-//		int id = 1;
-//		OrganizationModel result = null;
-//		try {
-//			result = orgService.getOrganizationByID(id);
-//		} catch (Exception e) {
-//			log.error("数据库操作异常",e);
-//		}
-//		Assert.assertNotNull("通过id查询异常", result);;
-//	}
-//	
-//	/**
-//	 * 
-//	 * <p>Description: 分页+搜索组织机构数据</p>
-//	 * @parameter
-//	 * @return
-//	 */
-//	public void testQueryOrg() {
-//		int pageNo = 1;
-//		int pageSize = 5;
-//		OrganizationModel searchOrg = new OrganizationModel();
-//		String orgName = "金融";
-//		searchOrg.setoName(orgName);
-//		OrganizationModel record = null;
-//		try {
-//			PageInfo<OrganizationModel> pages = orgService.queryOrgByPage(pageNo, pageSize, searchOrg);
-//			System.out.println(pages);
-//			record = pages.getList().get(0);
-//		} catch (Exception e) {
-//			log.error("数据库操作异常",e);
-//		}
-//		Assert.assertNotNull("分页查询异常", record);
-//	}
+	@Test
+	public void testOrg() throws Exception{
+		//this.testCreateOrg();
+		//this.testDeleteOrg();
+		//this.testUpdateOrg();
+		//this.testGetOrgById();
+		this.testQueryOrg();
+	}
+	
+	public void testCreateOrg() throws Exception{
+		OrganizationModel organizationModel = new OrganizationModel();
+		organizationModel.setOrgName("北方金融事业部");
+		organizationModel.setOrgAddress("上海浦东");
+		organizationModel.setOrgStatus("1");
+		ResponseResultUtil responseResult = orgController.createOrganization(organizationModel);
+		Assert.assertEquals("操作成功", responseResult.get("msg"));
+	}
+	
+	public void testDeleteOrg() throws Exception{
+		int id = 2;
+		ResponseResultUtil responseResult = orgController.removeOrganizationById(id);
+		Assert.assertEquals("操作成功", responseResult.get("msg"));
+	}
+	
+	public void testUpdateOrg() throws Exception {
+		OrganizationModel organizationModel = new OrganizationModel();
+		organizationModel.setOrgName("财务部");
+		organizationModel.setOrgAddress("上海浦东");
+		organizationModel.setOrgStatus("2");
+		organizationModel.setOrgId(9);
+		ResponseResultUtil responseResult = orgController.modifyOrganization(organizationModel.getOrgId(), organizationModel);
+		Assert.assertEquals("操作成功", responseResult.get("msg"));
+	}
+	
+	public void testGetOrgById() throws Exception {
+		int id = 1;
+		ResponseResultUtil responseResult = orgController.getOrganizationById(id);
+		Assert.assertNotNull(responseResult.get("data"));
+	}
+	
+	public void testQueryOrg() throws Exception {
+		int pageNo = 1;
+		int pageSize = 5;
+		String orgName = "研发";
+		ResponseResultUtil responseResult = orgController.queryOrganization(pageNo, pageSize, orgName);
+		Assert.assertNotNull(responseResult.get("data"));
+	}
 
 }

@@ -14,23 +14,103 @@ import com.primeton.maoxinjie.demo.model.UserModel;
  */
 public interface IUserDao {
 
-	//添加用户信息
+	/**
+	 * 
+	 * <p>Description: 添加用户信息</p>
+	 * @parameter
+	 * @return 
+	 * @param userModel
+	 * @return
+	 * @throws Exception
+	 */
 	int insertUser(UserModel userModel) throws Exception;
-	//通过ID删除用户
+	
+	/**
+	 * 
+	 * <p>Description: 通过ID删除用户</p>
+	 * @parameter
+	 * @return 
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
 	int deleteUserById(int id) throws Exception;
-	//修改用户信息
+	
+	/**
+	 * 
+	 * <p>Description: 修改用户信息</p>
+	 * @parameter
+	 * @return 
+	 * @param userModel
+	 * @return
+	 * @throws Exception
+	 */
 	int updateUser(UserModel userModel) throws Exception;
-	//通过账号和密码获取用户
+	
+	/**
+	 * 
+	 * <p>Description: 通过账号和密码获取用户</p>
+	 * @parameter
+	 * @return 
+	 * @param userModel
+	 * @return
+	 * @throws Exception
+	 */
 	UserModel getUserByAccountAndPwd(UserModel userModel) throws Exception;
-	//通过id获取用户信息
+	
+	/**
+	 * 
+	 * <p>Description: 通过id获取用户信息</p>
+	 * @parameter
+	 * @return 
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
 	UserModel getUserByID(int id) throws Exception;
-	//通过账号查询用户
+	
+	/**
+	 * 
+	 * <p>Description: 通过账号查询用户</p>
+	 * @parameter
+	 * @return 
+	 * @param userAccount
+	 * @return
+	 * @throws Exception
+	 */
 	UserModel getUserByUserAccount(String userAccount) throws Exception;
-	//通过orgId获取用户信息
+	
+	/**
+	 * 
+	 * <p>Description: 通过orgId获取用户信息</p>
+	 * @parameter
+	 * @return 
+	 * @param orgId
+	 * @return
+	 * @throws Exception
+	 */
 	List<UserModel> queryUserByOID(int orgId) throws Exception;
-	//分页+搜索查询
+	
+	/**
+	 * 
+	 * <p>Description: 分页+搜索查询</p>
+	 * @parameter
+	 * @return 
+	 * @param userModel
+	 * @return
+	 * @throws Exception
+	 */
 	List<UserModel> queryUserByPage(UserModel userModel) throws Exception;
-	//搜索查询用户的数量
+	
+	/**
+	 * 
+	 * <p>Description: 搜索查询用户的数量</p>
+	 * @parameter
+	 * @return 
+	 * @param userModel
+	 * @return
+	 * @throws Exception
+	 */
 	int countUser(UserModel userModel) throws Exception;
 	
 	
