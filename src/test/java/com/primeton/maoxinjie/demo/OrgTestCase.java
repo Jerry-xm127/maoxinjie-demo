@@ -36,17 +36,17 @@ public class OrgTestCase {
 	
 	@Test
 	public void testOrg() throws Exception{
-		//this.testCreateOrg();
-		//this.testDeleteOrg();
-		//this.testUpdateOrg();
-		//this.testGetOrgById();
-		this.testQueryOrg();
+//		this.testCreateOrg();
+//		this.testUpdateOrg();
+//		this.testGetOrgById();
+//		this.testQueryOrg();
+//		this.testDeleteOrg();
 	}
 	
 	public void testCreateOrg() throws Exception{
 		OrganizationModel organizationModel = new OrganizationModel();
 		organizationModel.setOrgName("北方金融事业部");
-		organizationModel.setOrgAddress("上海浦东");
+		organizationModel.setOrgAddress("上海浦东新区");
 		organizationModel.setOrgStatus("1");
 		ResponseResultUtil responseResult = orgController.createOrganization(organizationModel);
 		Assert.assertEquals("操作成功", responseResult.get("msg"));

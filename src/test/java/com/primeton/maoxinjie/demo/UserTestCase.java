@@ -40,7 +40,7 @@ public class UserTestCase {
 	
 	@Test
 	public void testUser() throws Exception {
-		this.testCreateUser();
+		//this.testCreateUser();
 		//this.testDeleteUser();
 		//this.testUpdateUser();
 		//this.testGetUserById();
