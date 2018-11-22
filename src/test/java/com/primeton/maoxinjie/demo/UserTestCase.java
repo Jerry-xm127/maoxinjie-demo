@@ -16,6 +16,7 @@ import org.springframework.web.context.WebApplicationContext;
 import com.github.pagehelper.PageInfo;
 import com.primeton.maoxinjie.demo.controller.UserController;
 import com.primeton.maoxinjie.demo.dao.IUserDao;
+import com.primeton.maoxinjie.demo.model.OrganizationModel;
 import com.primeton.maoxinjie.demo.model.UserModel;
 import com.primeton.maoxinjie.demo.service.IUserService;
 import com.primeton.maoxinjie.demo.util.ResponseResultUtil;
@@ -27,7 +28,6 @@ public class UserTestCase {
 	@Autowired
 	private WebApplicationContext context;
 	private MockMvc mvc;
-	private Logger log = LoggerFactory.getLogger(UserTestCase.class);
 	
 	@Autowired
 	private UserController userController;
@@ -40,36 +40,43 @@ public class UserTestCase {
 	
 	@Test
 	public void testUser() throws Exception {
-		//this.testCreateUser();
-		//this.testDeleteUser();
-		//this.testUpdateUser();
-		//this.testGetUserById();
-		//this.testQueryUser();
-		
+		UserModel userModel = this.buildUserModel();
+		this.testCreateUser(userModel);
+		this.testUpdateUser(userModel);
+		this.testGetUserById(userModel);
+		this.testQueryUser();
+		this.testDeleteUser(userModel);
 	}
 
-	public void testCreateUser() throws Exception{
+	public UserModel buildUserModel(){
 		UserModel userModel = new UserModel();
-		userModel.setUserAccount("ceshiseven");
-		userModel.setUserName("测试者7");
+		userModel.setUserId(50);
+		userModel.setUserAccount("ceshitest");
+		userModel.setUserName("测试Junit");
 		userModel.setUserPwd("123456");
 		userModel.setUserAge(25);
 		userModel.setUserSex("1");
+		userModel.setUserPhone("18888888888");
+		OrganizationModel org = new OrganizationModel();
+		org.setOrgId(8);
+		userModel.setOrg(org);
+		userModel.setUserStatus("1");
+		return userModel;
+	}
+	
+	public void testCreateUser(UserModel userModel) throws Exception{
 		ResponseResultUtil responseResult = userController.createUser(userModel);
 		Assert.assertEquals("操作成功", responseResult.get("msg"));
 	}
-	
-	public void testDeleteUser() throws Exception{
-		int id = 24;
-		ResponseResultUtil responseResult = userController.removeUser(id);
-		Assert.assertEquals("操作成功", responseResult.get("msg"));
+
+	public void testGetUserById(UserModel userModel) throws Exception {
+		ResponseResultUtil responseResult = userController.getUser(userModel.getUserId());
+		Assert.assertNotNull(responseResult.get("data"));;
 	}
+
 	
-	public void testUpdateUser() throws Exception{
-		UserModel userModel = new UserModel();
-		userModel.setUserId(25);
-		userModel.setUserAccount("ceshioneUpdate");
-		userModel.setUserName("测试者1修改");
+	public void testUpdateUser(UserModel userModel) throws Exception{
+		userModel.setUserName("修改Junit");
 		userModel.setUserAge(29);;
 		userModel.setUserSex("0");
 		userModel.setUserStatus("1");
@@ -77,18 +84,13 @@ public class UserTestCase {
 		Assert.assertEquals("操作成功", responseResult.get("msg"));
 	}
 	
-	public void testGetUserById() throws Exception {
-		int id = 25;
-		ResponseResultUtil responseResult = userController.getUser(id);
-		Assert.assertNotNull(responseResult.get("data"));;
+	public void testQueryUser() throws Exception{
+		ResponseResultUtil responseResult = userController.queryUsers(1, 5, null, null);
+		Assert.assertNotNull(responseResult.get("data"));
 	}
 	
-	public void testQueryUser() throws Exception{
-		int pageNo = 1;
-		int pageSize = 5;
-		String userName = null;
-		String sex = null;
-		ResponseResultUtil responseResult = userController.queryUsers(pageNo, pageSize, userName, sex);
-		Assert.assertNotNull(responseResult.get("data"));
+	public void testDeleteUser(UserModel userModel) throws Exception{
+		ResponseResultUtil responseResult = userController.removeUser(userModel.getUserId());
+		Assert.assertEquals("操作成功", responseResult.get("msg"));
 	}
 }

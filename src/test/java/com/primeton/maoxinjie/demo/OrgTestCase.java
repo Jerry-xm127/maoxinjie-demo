@@ -23,7 +23,6 @@ public class OrgTestCase {
 	@Autowired
 	private WebApplicationContext context;
 	private MockMvc mvc;
-	private Logger log = LoggerFactory.getLogger(OrgTestCase.class);
 	
 	@Autowired
 	private OrganizationController orgController;
@@ -36,50 +35,46 @@ public class OrgTestCase {
 	
 	@Test
 	public void testOrg() throws Exception{
-//		this.testCreateOrg();
-//		this.testUpdateOrg();
-//		this.testGetOrgById();
-//		this.testQueryOrg();
-//		this.testDeleteOrg();
+		OrganizationModel org = this.buildOrg();
+		this.testCreateOrg(org);
+		this.testUpdateOrg(org);
+		this.testGetOrgById(org);
+		this.testQueryOrg();
+		this.testDeleteOrg(org);
 	}
 	
-	public void testCreateOrg() throws Exception{
+	public OrganizationModel buildOrg() {
 		OrganizationModel organizationModel = new OrganizationModel();
-		organizationModel.setOrgName("北方金融事业部");
+		organizationModel.setOrgName("云计算部门");
 		organizationModel.setOrgAddress("上海浦东新区");
 		organizationModel.setOrgStatus("1");
+		return organizationModel;
+	}
+	
+	public void testCreateOrg(OrganizationModel organizationModel) throws Exception{
 		ResponseResultUtil responseResult = orgController.createOrganization(organizationModel);
 		Assert.assertEquals("操作成功", responseResult.get("msg"));
 	}
 	
-	public void testDeleteOrg() throws Exception{
-		int id = 2;
-		ResponseResultUtil responseResult = orgController.removeOrganizationById(id);
-		Assert.assertEquals("操作成功", responseResult.get("msg"));
-	}
-	
-	public void testUpdateOrg() throws Exception {
-		OrganizationModel organizationModel = new OrganizationModel();
-		organizationModel.setOrgName("财务部");
-		organizationModel.setOrgAddress("上海浦东");
-		organizationModel.setOrgStatus("2");
-		organizationModel.setOrgId(9);
-		ResponseResultUtil responseResult = orgController.modifyOrganization(organizationModel.getOrgId(), organizationModel);
-		Assert.assertEquals("操作成功", responseResult.get("msg"));
-	}
-	
-	public void testGetOrgById() throws Exception {
-		int id = 1;
-		ResponseResultUtil responseResult = orgController.getOrganizationById(id);
+	public void testGetOrgById(OrganizationModel organizationModel) throws Exception {
+		ResponseResultUtil responseResult = orgController.getOrganizationById(organizationModel.getOrgId());
 		Assert.assertNotNull(responseResult.get("data"));
 	}
 	
 	public void testQueryOrg() throws Exception {
-		int pageNo = 1;
-		int pageSize = 5;
-		String orgName = "研发";
-		ResponseResultUtil responseResult = orgController.queryOrganization(pageNo, pageSize, orgName);
+		ResponseResultUtil responseResult = orgController.queryOrganization(1, 5, null);
 		Assert.assertNotNull(responseResult.get("data"));
 	}
+	
+	public void testUpdateOrg(OrganizationModel organizationModel) throws Exception {
+		organizationModel.setOrgName("大数据服务");
+		organizationModel.setOrgAddress("北京");
+		ResponseResultUtil responseResult = orgController.modifyOrganization(organizationModel.getOrgId(), organizationModel);
+		Assert.assertEquals("操作成功", responseResult.get("msg"));
+	}
 
+	public void testDeleteOrg(OrganizationModel organizationModel) throws Exception{
+		ResponseResultUtil responseResult = orgController.removeOrganizationById(organizationModel.getOrgId());
+		Assert.assertEquals("操作成功", responseResult.get("msg"));
+	}
 }
