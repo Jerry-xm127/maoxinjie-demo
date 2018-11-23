@@ -4,8 +4,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -13,16 +11,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.github.pagehelper.PageInfo;
 import com.primeton.maoxinjie.demo.controller.UserController;
-import com.primeton.maoxinjie.demo.dao.IUserDao;
 import com.primeton.maoxinjie.demo.model.OrganizationModel;
 import com.primeton.maoxinjie.demo.model.UserModel;
-import com.primeton.maoxinjie.demo.service.IUserService;
 import com.primeton.maoxinjie.demo.util.ResponseResultUtil;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes=MaoxinjieDemoApplication.class)
 public class UserTestCase {
 	
 	@Autowired

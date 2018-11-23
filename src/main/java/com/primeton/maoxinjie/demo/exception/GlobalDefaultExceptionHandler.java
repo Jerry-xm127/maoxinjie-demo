@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.primeton.maoxinjie.demo.controller.UserController;
 import com.primeton.maoxinjie.demo.util.ResponseResultUtil;
 
 /**

@@ -134,8 +134,21 @@ public class UserController {
 	@ApiOperation(value="根据账号密码登录",notes="验证登录是否正确",response=ResponseResultUtil.class)
 	@ApiImplicitParams({
 			@ApiImplicitParam(name="userModel",value="用户信息")})
-	@RequestMapping(value="/login", method=RequestMethod.POST)
+	@RequestMapping(value="/login", method=RequestMethod.POST)	
 	public ResponseResultUtil login(@RequestBody UserModel userModel,HttpSession httpSession) throws Exception {
 		return userService.getUserByAccountAndPwd(userModel,httpSession);
 	}
+	
+	/**
+	 * 
+	 * <p>Description: 用户退出清除session信息</p>
+	 * @parameter
+	 * @return 
+	 * @param session
+	 */
+	@ApiOperation(value = "用户退出", response = ResponseResultUtil.class)
+    @RequestMapping(value = "/out", method = RequestMethod.DELETE)
+    public void signOut(HttpSession session) {
+        session.removeAttribute("user");
+    }
 }
