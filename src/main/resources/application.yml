@@ -10,9 +10,9 @@ spring:
           filters: stat
           driver-class-name: com.mysql.cj.jdbc.Driver
           #基本属性
-          url: jdbc:mysql://127.0.0.1:3306/primeton_demo?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8&useSSL=false
+          url: jdbc:mysql://10.15.15.196:3306/jinandemo?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8&useSSL=false
           username: root
-          password: 778J334x08_M
+          password: primeton4cloud
           #配置初始化大小/最小/最大
           initial-size: 1
           min-idle: 1
