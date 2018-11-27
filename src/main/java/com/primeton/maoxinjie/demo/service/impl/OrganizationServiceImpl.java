@@ -46,9 +46,11 @@ public class OrganizationServiceImpl implements IOrganizationService {
 	@Override
 	public ResponseResultUtil createOrganization(OrganizationModel organizationModel) throws Exception {
 		ResponseResultUtil responseResult = new ResponseResultUtil();
+		//判断创建的组织机构信息是否为空
 		if(organizationModel == null) {
 			throw new BusyException(ResultCodeEnum.ORG_NULL_ERROR.getCode(),ResultCodeEnum.ORG_NULL_ERROR.getMessage());
 		}
+		//判断添加的组织机构名称是否存在
 		if(organizationDao.getOrganizationByOrgName(organizationModel.getOrgName()) != null) {
 			throw new BusyException(ResultCodeEnum.ORG_EXIST_ERROR.getCode(),ResultCodeEnum.ORG_EXIST_ERROR.getMessage());
 		}
@@ -146,8 +148,6 @@ public class OrganizationServiceImpl implements IOrganizationService {
 	@Override
 	public ResponseResultUtil queryOrgByPage(int pageNo, int pageSize, OrganizationModel organizationModel)
 			throws Exception {
-		//对于官方文档所说PageHelper方法调用后紧跟 MyBatis 查询方法，这就是安全的
-		PageHelper.startPage(pageNo, pageSize);
 		ResponseResultUtil responseResult = new ResponseResultUtil();
 		//对于官方文档所说PageHelper方法调用后紧跟 MyBatis 查询方法，这就是安全的
 		PageHelper.startPage(pageNo, pageSize);
