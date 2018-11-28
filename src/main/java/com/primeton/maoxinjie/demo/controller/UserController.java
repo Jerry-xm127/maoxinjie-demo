@@ -115,10 +115,7 @@ public class UserController {
 									@RequestParam(value="pageSize",defaultValue="5") int pageSize,
 									@RequestParam(name="userName",required=false) String userName,
 									@RequestParam(name="sex",required=false) String sex) throws Exception {
-		UserModel serachUser = new UserModel();
-		serachUser.setUserName(userName);
-		serachUser.setUserSex(sex);
-		return userService.queryUserByPage(pageNo, pageSize, serachUser);
+		return userService.queryUserByPage(pageNo, pageSize, userName, sex);
 	}
 	
 	/**

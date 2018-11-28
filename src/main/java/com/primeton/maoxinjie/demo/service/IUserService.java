@@ -82,7 +82,7 @@ public interface IUserService {
 	 * @return
 	 * @throws Exception
 	 */
-	ResponseResultUtil queryUserByPage(int pageNo, int pageSize, UserModel userModel) throws Exception;
+	ResponseResultUtil queryUserByPage(int pageNo, int pageSize, String userName, String sex) throws Exception;
 	
 	/**
 	 * 

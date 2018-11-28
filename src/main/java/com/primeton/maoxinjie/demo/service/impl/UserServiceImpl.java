@@ -171,11 +171,18 @@ public class UserServiceImpl implements IUserService {
 	 * @throws Exception
 	 */
 	@Override
-	public ResponseResultUtil queryUserByPage(int pageNo, int pageSize, UserModel userModel) throws Exception {
-		ResponseResultUtil responseResult = new ResponseResultUtil();
+	public ResponseResultUtil queryUserByPage(int pageNo, int pageSize, String userName, String sex) throws Exception {
+			ResponseResultUtil responseResult = new ResponseResultUtil();
+			UserModel searchUser = new UserModel();
+			if(StrUtil.isNotNull(userName)) {
+				searchUser.setUserName(userName);
+			}
+			if(StrUtil.isNotNull(sex)) {
+				searchUser.setUserSex(sex);
+			}
 			//对于官方文档所说PageHelper方法调用后紧跟 MyBatis 查询方法，这就是安全的
 			PageHelper.startPage(pageNo, pageSize);
-			List<UserModel> userList = userDao.queryUserByPage(userModel);
+			List<UserModel> userList = userDao.queryUserByPage(searchUser);
 			PageInfo<UserModel> pageInfo = new PageInfo<>(userList);
 			if (pageInfo.getList().size() > 0) {
 				responseResult = ResponseResultUtil.success();
