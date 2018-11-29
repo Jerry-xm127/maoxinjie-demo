@@ -61,8 +61,9 @@ public class UserController {
 	 * @throws Exception
 	 */
 	@ApiOperation(value="根据id删除用户信息",notes="删除用户信息",response=ResponseResultUtil.class)
+	@ApiImplicitParam(value="用户id", name="id", dataType = "Integer", required = true)
 	@RequestMapping(value="/{id}",method=RequestMethod.DELETE)
-	public ResponseResultUtil removeUser(@PathVariable("id") int id) throws Exception {
+	public ResponseResultUtil removeUser(@PathVariable("id") Integer id) throws Exception {
 		return userService.removeUserById(id);
 	}
 	

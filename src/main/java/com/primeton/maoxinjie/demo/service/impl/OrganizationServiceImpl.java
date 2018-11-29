@@ -17,6 +17,7 @@ import com.primeton.maoxinjie.demo.model.OrganizationModel;
 import com.primeton.maoxinjie.demo.model.UserModel;
 import com.primeton.maoxinjie.demo.service.IOrganizationService;
 import com.primeton.maoxinjie.demo.util.ResponseResultUtil;
+import com.primeton.maoxinjie.demo.util.StrUtil;
 
 /**
  * 
@@ -146,18 +147,23 @@ public class OrganizationServiceImpl implements IOrganizationService {
 	 * @throws Exception
 	 */
 	@Override
-	public ResponseResultUtil queryOrgByPage(int pageNo, int pageSize, OrganizationModel organizationModel)
+	public ResponseResultUtil queryOrgByPage(int pageNo, int pageSize, String orgName)
 			throws Exception {
 		ResponseResultUtil responseResult = new ResponseResultUtil();
+		OrganizationModel searchOrg = new OrganizationModel();
+		if(StrUtil.isNotNull(orgName)) {
+			searchOrg.setOrgName(orgName);
+		}
 		//对于官方文档所说PageHelper方法调用后紧跟 MyBatis 查询方法，这就是安全的
 		PageHelper.startPage(pageNo, pageSize);
-		List<OrganizationModel> orgList = organizationDao.queryOrganizationByPage(organizationModel);;
+		List<OrganizationModel> orgList = organizationDao.queryOrganizationByPage(searchOrg);;
 		PageInfo<OrganizationModel> pageInfo = new PageInfo<>(orgList);
 		if (pageInfo.getList().size() > 0) {
 			responseResult = ResponseResultUtil.success();
 			responseResult.put("data", pageInfo);
 		}else {
 			responseResult = ResponseResultUtil.error(ResultCodeEnum.NO_FIND_DATA.getCode(), ResultCodeEnum.NO_FIND_DATA.getMessage());
+			responseResult.put("data", pageInfo.getList());
 		}
 		return responseResult;
 	}

@@ -68,5 +68,5 @@ public interface IOrganizationService {
 	 * @return
 	 * @throws Exception
 	 */
-	ResponseResultUtil queryOrgByPage(int pageNo, int pageSize, OrganizationModel organizationModel) throws Exception;
+	ResponseResultUtil queryOrgByPage(int pageNo, int pageSize, String orgName) throws Exception;
 }

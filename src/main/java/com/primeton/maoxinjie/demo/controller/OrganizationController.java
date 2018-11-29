@@ -106,8 +106,6 @@ public class OrganizationController {
 	public ResponseResultUtil queryOrganization(@RequestParam(value="pageNo",defaultValue="1") int pageNo, 
 									@RequestParam(value="pageSize",defaultValue="5") int pageSize,
 									@RequestParam(name="orgName",required=false) String orgName) throws Exception {
-		OrganizationModel serachOrg = new OrganizationModel();
-		serachOrg.setOrgName(orgName);
-		return organizationService.queryOrgByPage(pageNo, pageSize, serachOrg);
+		return organizationService.queryOrgByPage(pageNo, pageSize, orgName);
 	}
 }

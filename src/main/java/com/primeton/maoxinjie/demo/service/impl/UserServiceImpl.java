@@ -189,6 +189,7 @@ public class UserServiceImpl implements IUserService {
 				responseResult.put("data", pageInfo);
 			}else {
 				responseResult = ResponseResultUtil.error(ResultCodeEnum.NO_FIND_DATA.getCode(), ResultCodeEnum.NO_FIND_DATA.getMessage());
+				responseResult.put("data", pageInfo.getList());
 			}
 		return responseResult;
 	}
