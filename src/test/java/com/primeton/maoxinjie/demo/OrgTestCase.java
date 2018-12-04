@@ -67,7 +67,7 @@ public class OrgTestCase {
 	public void testUpdateOrg(OrganizationModel organizationModel) throws Exception {
 		organizationModel.setOrgName("大数据服务");
 		organizationModel.setOrgAddress("北京");
-		ResponseResultUtil responseResult = orgController.modifyOrganization(organizationModel.getOrgId(), organizationModel);
+		ResponseResultUtil responseResult = orgController.modifyOrganization(organizationModel);
 		Assert.assertEquals("操作成功", responseResult.get("msg"));
 	}
 

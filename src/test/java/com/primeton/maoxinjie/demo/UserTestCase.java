@@ -37,10 +37,10 @@ public class UserTestCase {
 	public void testUser() throws Exception {
 		UserModel userModel = this.buildUserModel();
 		this.testCreateUser(userModel);
-		this.testUpdateUser(userModel);
-		this.testGetUserById(userModel);
-		this.testQueryUser();
-		this.testDeleteUser(userModel);
+//		this.testUpdateUser(userModel);
+//		this.testGetUserById(userModel);
+//		this.testQueryUser();
+//		this.testDeleteUser(userModel);
 	}
 
 	public UserModel buildUserModel(){
@@ -75,12 +75,12 @@ public class UserTestCase {
 		userModel.setUserAge(29);;
 		userModel.setUserSex("0");
 		userModel.setUserStatus("1");
-		ResponseResultUtil responseResult = userController.modifyUser(userModel.getUserId(), userModel);
+		ResponseResultUtil responseResult = userController.modifyUser(userModel);
 		Assert.assertEquals("操作成功", responseResult.get("msg"));
 	}
 	
 	public void testQueryUser() throws Exception{
-		ResponseResultUtil responseResult = userController.queryUsers(1, 5, null, null);
+		ResponseResultUtil responseResult = userController.queryUsers(1, 5, null, null, 0);
 		Assert.assertNotNull(responseResult.get("data"));
 	}
 	
