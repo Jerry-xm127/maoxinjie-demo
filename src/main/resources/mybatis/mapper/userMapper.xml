@@ -44,7 +44,7 @@
 			USER_REMARK
 		)
 		VALUES
-		(#{userName},#{userAccount},#{userPwd},#{userAge},#{userSex},#{userPhone},#{org.orgId},#{userStatus},#{userRemark})
+		(#{userName},#{userAccount},#{userPwd},#{userAge},#{userSex},#{userPhone},#{org.orgId},'1',#{userRemark})
 	</insert>
 	<!-- 通过id删除用户 -->
 	<delete id="deleteUserById" parameterType="int">
@@ -129,15 +129,21 @@
 	<!-- 用户的分页搜索查询 -->
 	<select id ="queryUserByPage" resultMap="resultUserList" parameterType="UserModel">
 		SELECT
-			<include refid="baseParams"/>
+			<include refid="userOrgParams"/>
 		FROM
-			mxj_demo_user
+			mxj_demo_user u
+		LEFT JOIN mxj_demo_organization r
+		ON 
+			u.ORG_ID=r.ID
 		<where>
 			<if test="userName != null">
-				AND USER_NAME like CONCAT('%',#{userName},'%')
+				AND u.USER_NAME like CONCAT('%',#{userName},'%')
 			</if>
 			<if test="userSex != null">
-				AND USER_SEX=#{userSex}
+				AND u.USER_SEX=#{userSex}
+			</if>
+			<if test="org.orgId != null">
+				AND u.ORG_ID=#{org.orgId}
 			</if>
 		</where>
 		ORDER BY ID

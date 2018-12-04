@@ -14,6 +14,7 @@ import com.github.pagehelper.PageInfo;
 import com.primeton.maoxinjie.demo.dao.IUserDao;
 import com.primeton.maoxinjie.demo.exception.BusyException;
 import com.primeton.maoxinjie.demo.exception.ResultCodeEnum;
+import com.primeton.maoxinjie.demo.model.OrganizationModel;
 import com.primeton.maoxinjie.demo.model.UserModel;
 import com.primeton.maoxinjie.demo.service.IUserService;
 import com.primeton.maoxinjie.demo.util.ResponseResultUtil;
@@ -171,15 +172,20 @@ public class UserServiceImpl implements IUserService {
 	 * @throws Exception
 	 */
 	@Override
-	public ResponseResultUtil queryUserByPage(int pageNo, int pageSize, String userName, String sex) throws Exception {
+	public ResponseResultUtil queryUserByPage(int pageNo, int pageSize, String userName, String sex, int orgId) throws Exception {
 			ResponseResultUtil responseResult = new ResponseResultUtil();
 			UserModel searchUser = new UserModel();
+			OrganizationModel org = new OrganizationModel();
 			if(StrUtil.isNotNull(userName)) {
 				searchUser.setUserName(userName);
 			}
 			if(StrUtil.isNotNull(sex)) {
 				searchUser.setUserSex(sex);
 			}
+			if(orgId != 0) {
+				org.setOrgId(orgId);
+			}
+			searchUser.setOrg(org);
 			//对于官方文档所说PageHelper方法调用后紧跟 MyBatis 查询方法，这就是安全的
 			PageHelper.startPage(pageNo, pageSize);
 			List<UserModel> userList = userDao.queryUserByPage(searchUser);

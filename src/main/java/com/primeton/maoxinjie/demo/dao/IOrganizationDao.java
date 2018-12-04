@@ -80,6 +80,17 @@ public interface IOrganizationDao {
 	
 	/**
 	 * 
+	 * <p>Description: 根据pid获取机构下边的子数据</p>
+	 * @parameter
+	 * @return 
+	 * @param id
+	 * @return
+	 * @throws Exception
+	 */
+	List<OrganizationModel> queryOrganizationsByPid(Integer id) throws Exception;
+	
+	/**
+	 * 
 	 * <p>Description: 搜索组织机构的数量</p>
 	 * @parameter
 	 * @return 

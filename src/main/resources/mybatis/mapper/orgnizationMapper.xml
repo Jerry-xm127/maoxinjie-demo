@@ -8,8 +8,9 @@
 		<result column="ORG_NAME" property="orgName" />
 		<result column="ORG_ADDRESS" property="orgAddress" />
 		<result column="ORG_STATUS" property="orgStatus" />
+		<result column="ORG_PID" property="orgPid" />
 		<result column="ORG_REMARK" property="orgRemark" />
-		<collection property="users" ofType="UserModel" columnPrefix="u_">
+		<collection property="users" ofType="UserModel">
 			<id property="userId" column="ID" />
 			<result column="USER_NAME" property="userName" javaType="java.lang.String" jdbcType="VARCHAR"/>
 			<result column="USER_ACCOUNT" property="userAccount" javaType="java.lang.String" jdbcType="VARCHAR" />
@@ -18,7 +19,7 @@
 		</collection>
 	</resultMap>
 	<sql id = "params"> 
-		ID,ORG_NAME,ORG_ADDRESS,ORG_STATUS,ORG_REMARK
+		ID,ORG_NAME,ORG_ADDRESS,ORG_STATUS,ORG_PID,ORG_REMARK
 	</sql>
 
 	<!-- 添加组织机构 -->
@@ -32,7 +33,7 @@
 			ORG_REMARK
 		)
 		VALUES
-		(#{orgName},#{orgAddress},#{orgStatus},#{orgPid},#{orgRemark})
+		(#{orgName},#{orgAddress},'1',#{orgPid},#{orgRemark})
 	</insert>
 	<!-- 通过id删除组织机构 -->
 	<delete id="deleteOrganizationById" parameterType="OrganizationModel">
@@ -96,5 +97,14 @@
 			</if>
 		</where>
 		ORDER BY ID
+	</select>
+	
+	<select id ="queryOrganizationsByPid" resultMap="resultListOrganization" parameterType="int">
+		SELECT
+			<include refid="params"/>
+		FROM
+			mxj_demo_organization
+		WHERE 
+			ORG_PID = #{pid}
 	</select>
 </mapper>

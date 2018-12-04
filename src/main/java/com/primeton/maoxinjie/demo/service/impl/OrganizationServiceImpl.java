@@ -55,6 +55,9 @@ public class OrganizationServiceImpl implements IOrganizationService {
 		if(organizationDao.getOrganizationByOrgName(organizationModel.getOrgName()) != null) {
 			throw new BusyException(ResultCodeEnum.ORG_EXIST_ERROR.getCode(),ResultCodeEnum.ORG_EXIST_ERROR.getMessage());
 		}
+		if(organizationModel.getOrgPid() == null) {
+			organizationModel.setOrgPid(0);
+		}
 		if(organizationDao.insertOrganization(organizationModel) > 0) {
 			responseResult = ResponseResultUtil.success();
 		}else {
@@ -147,7 +150,7 @@ public class OrganizationServiceImpl implements IOrganizationService {
 	 * @throws Exception
 	 */
 	@Override
-	public ResponseResultUtil queryOrgByPage(int pageNo, int pageSize, String orgName)
+	public ResponseResultUtil queryOrgsByPage(int pageNo, int pageSize, String orgName)
 			throws Exception {
 		ResponseResultUtil responseResult = new ResponseResultUtil();
 		OrganizationModel searchOrg = new OrganizationModel();
@@ -166,6 +169,27 @@ public class OrganizationServiceImpl implements IOrganizationService {
 			responseResult.put("data", pageInfo.getList());
 		}
 		return responseResult;
+	}
+
+	/**
+	 * 
+	 * <p>Description: 根据pid查询机构下边的子数据</p> 
+	 * @param pid
+	 * @return
+	 * @throws Exception
+	 */
+	@Override
+	public ResponseResultUtil queryOrgsByPid(Integer pid) throws Exception {
+		ResponseResultUtil responseResult = new ResponseResultUtil();
+				List<OrganizationModel> orgList = organizationDao.queryOrganizationsByPid(pid);
+				if (orgList.size() > 0) {
+					responseResult = ResponseResultUtil.success();
+					responseResult.put("data", orgList);
+				}else {
+					responseResult = ResponseResultUtil.error(ResultCodeEnum.NO_FIND_DATA.getCode(), ResultCodeEnum.NO_FIND_DATA.getMessage());
+					responseResult.put("data", orgList);
+				}
+				return responseResult;
 	}
 
 }

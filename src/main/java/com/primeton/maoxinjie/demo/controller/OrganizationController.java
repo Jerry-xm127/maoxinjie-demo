@@ -70,8 +70,8 @@ public class OrganizationController {
 	 * @throws Exception
 	 */
 	@ApiOperation(value="通过id修改",notes="通过id修改组织机构",response=ResponseResultUtil.class)
-	@RequestMapping(value="/{id}",method=RequestMethod.PUT)
-	public ResponseResultUtil modifyOrganization(@PathVariable("id") int id, @RequestBody OrganizationModel organizationModel) throws Exception {
+	@RequestMapping(value="/",method=RequestMethod.PUT)
+	public ResponseResultUtil modifyOrganization(@RequestBody OrganizationModel organizationModel) throws Exception {
 		return organizationService.modifyOrganization(organizationModel);
 	}
 	
@@ -106,6 +106,21 @@ public class OrganizationController {
 	public ResponseResultUtil queryOrganization(@RequestParam(value="pageNo",defaultValue="1") int pageNo, 
 									@RequestParam(value="pageSize",defaultValue="5") int pageSize,
 									@RequestParam(name="orgName",required=false) String orgName) throws Exception {
-		return organizationService.queryOrgByPage(pageNo, pageSize, orgName);
+		return organizationService.queryOrgsByPage(pageNo, pageSize, orgName);
+	}
+	
+	/**
+	 * 
+	 * <p>Description: 根据pid查询该机构下的所有子机构</p>
+	 * @parameter
+	 * @return 
+	 * @param pid
+	 * @return
+	 * @throws Exception
+	 */
+	@ApiOperation(value = "根据pid查询该机构下的所有子机构", notes="根据pid查询子结构",response=ResponseResultUtil.class)
+	@RequestMapping(value="/queryList",method=RequestMethod.GET)
+	public ResponseResultUtil queryOrganizationsByPid(@RequestParam(name="pid",required=true) Integer pid) throws Exception {
+		return organizationService.queryOrgsByPid(pid);
 	}
 }

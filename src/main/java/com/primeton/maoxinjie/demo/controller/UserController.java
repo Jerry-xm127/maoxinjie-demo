@@ -78,8 +78,8 @@ public class UserController {
 	 * @throws Exception
 	 */
 	@ApiOperation(value="通过id修改",notes="通过id修改用户信息",response=ResponseResultUtil.class)
-	@RequestMapping(value="/{id}",method=RequestMethod.PUT)
-	public ResponseResultUtil modifyUser(@PathVariable("id") int id, @RequestBody UserModel userModel) throws Exception {
+	@RequestMapping(value="/",method=RequestMethod.PUT)
+	public ResponseResultUtil modifyUser(@RequestBody UserModel userModel) throws Exception {
 		return userService.modifyUser(userModel);
 	}
 	
@@ -115,8 +115,9 @@ public class UserController {
 	public ResponseResultUtil queryUsers(@RequestParam(value="pageNo",defaultValue="1") int pageNo, 
 									@RequestParam(value="pageSize",defaultValue="5") int pageSize,
 									@RequestParam(name="userName",required=false) String userName,
-									@RequestParam(name="sex",required=false) String sex) throws Exception {
-		return userService.queryUserByPage(pageNo, pageSize, userName, sex);
+									@RequestParam(name="sex",required=false) String sex,
+									@RequestParam(name="orgId",required=false) int orgId) throws Exception {
+		return userService.queryUserByPage(pageNo, pageSize, userName, sex, orgId);
 	}
 	
 	/**

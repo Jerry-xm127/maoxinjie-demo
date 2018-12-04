@@ -3,6 +3,10 @@ package com.primeton.maoxinjie.demo.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+import org.junit.runners.Parameterized.Parameter;
+import org.junit.runners.Parameterized.Parameters;
+
 import com.primeton.maoxinjie.demo.model.UserModel;
 
 

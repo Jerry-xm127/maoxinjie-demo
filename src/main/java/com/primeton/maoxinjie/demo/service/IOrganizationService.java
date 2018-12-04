@@ -68,5 +68,16 @@ public interface IOrganizationService {
 	 * @return
 	 * @throws Exception
 	 */
-	ResponseResultUtil queryOrgByPage(int pageNo, int pageSize, String orgName) throws Exception;
+	ResponseResultUtil queryOrgsByPage(int pageNo, int pageSize, String orgName) throws Exception;
+	
+	/**
+	 * 
+	 * <p>Description: 根据pid查询机构下边的子数据</p>
+	 * @parameter
+	 * @return 
+	 * @param pid
+	 * @return
+	 * @throws Exception
+	 */
+	ResponseResultUtil queryOrgsByPid(Integer pid) throws Exception;
 }
